@@ -1,0 +1,94 @@
+﻿server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+spring:
+  application:
+    name: ledgersync
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ledgersync}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: LedgerSyncHikariPool
+      maximum-pool-size: 15
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 25
+          order_inserts: true
+          order_updates: true
+  flyway:
+    enabled: ${SPRING_FLYWAY_ENABLED:true}
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
+      timeout: 2000ms
+
+# Management & Observability
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,readiness,liveness,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# Application Custom Properties
+ledgersync:
+  security:
+    enabled: true
+    header-name: X-API-Key
+    api-keys:
+      ingestion: ${LEDGERSYNC_SECURITY_API_KEYS_INGESTION}
+      operator: ${LEDGERSYNC_SECURITY_API_KEYS_OPERATOR}
+      admin: ${LEDGERSYNC_SECURITY_API_KEYS_ADMIN}
+  webhook:
+    stripe:
+      secret: ${LEDGERSYNC_WEBHOOK_STRIPE_SECRET}
+      tolerance-seconds: 300
+    razorpay:
+      secret: ${LEDGERSYNC_WEBHOOK_RAZORPAY_SECRET}
+      tolerance-seconds: 300
+  inbox:
+    enabled: ${LEDGERSYNC_INBOX_WORKER_ENABLED:true}
+    poll-interval-ms: ${LEDGERSYNC_INBOX_POLL_INTERVAL_MS:2000}
+    batch-size: ${LEDGERSYNC_INBOX_BATCH_SIZE:25}
+    max-retries: ${LEDGERSYNC_INBOX_MAX_RETRIES:5}
+    abandoned-timeout-seconds: ${LEDGERSYNC_INBOX_ABANDONED_TIMEOUT_SECONDS:300}
+  reconciliation:
+    enabled: true
+    cron: ${LEDGERSYNC_RECONCILIATION_CRON:0 */15 * * * *}
+    batch-size: 50
+
+# OpenAPI documentation config
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+

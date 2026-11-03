@@ -1,0 +1,50 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: ledgersync-test
+  datasource:
+    url: jdbc:h2:mem:ledgersynctest;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    enabled: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+ledgersync:
+  security:
+    enabled: true
+    header-name: X-API-Key
+    api-keys:
+      ingestion: test-ingest-key
+      operator: test-operator-key
+      admin: test-admin-key
+  webhook:
+    stripe:
+      secret: whsec_test_secret_for_tests_123
+      tolerance-seconds: 300
+    razorpay:
+      secret: rzp_test_secret_for_tests_456
+      tolerance-seconds: 300
+  inbox:
+    enabled: false
+    poll-interval-ms: 500
+    batch-size: 10
+    max-retries: 3
+    abandoned-timeout-seconds: 10
+  reconciliation:
+    enabled: false
+    cron: "-"
+    batch-size: 10

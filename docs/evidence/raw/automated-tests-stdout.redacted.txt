@@ -1,0 +1,153 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.ledgersync:ledgersync >----------------------
+[INFO] Building ledgersync 1.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ ledgersync ---
+[INFO] Deleting E:\ledgerSync\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ledgersync ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ledgersync ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 74 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ledgersync ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ledgersync ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ledgersync ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.ledgersync.e2e.LedgerSyncEndToEndTest
+04:55:32.285 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.ledgersync.e2e.LedgerSyncEndToEndTest]: LedgerSyncEndToEndTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+04:55:32.379 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.ledgersync.LedgerSyncApplication for test class com.ledgersync.e2e.LedgerSyncEndToEndTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2026-11-03T04:55:32.938+05:30  INFO 22424 --- [ledgersync-test] [           main] c.ledgersync.e2e.LedgerSyncEndToEndTest  : Starting LedgerSyncEndToEndTest using Java 21.0.13 with PID 22424 (started by rishi in E:\ledgerSync)
+2026-11-03T04:55:32.941+05:30  INFO 22424 --- [ledgersync-test] [           main] c.ledgersync.e2e.LedgerSyncEndToEndTest  : The following 1 profile is active: "test"
+2026-11-03T04:55:34.383+05:30  INFO 22424 --- [ledgersync-test] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-03T04:55:34.385+05:30  INFO 22424 --- [ledgersync-test] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-03T04:55:34.789+05:30  INFO 22424 --- [ledgersync-test] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 393 ms. Found 8 JPA repository interfaces.
+2026-11-03T04:55:37.037+05:30  INFO 22424 --- [ledgersync-test] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-03T04:55:37.175+05:30  INFO 22424 --- [ledgersync-test] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-11-03T04:55:37.303+05:30  INFO 22424 --- [ledgersync-test] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-11-03T04:55:37.962+05:30  INFO 22424 --- [ledgersync-test] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-03T04:55:38.026+05:30  INFO 22424 --- [ledgersync-test] [           main] com.zaxxer.hikari.HikariDataSource       : LedgerSyncHikariPool - Starting...
+2026-11-03T04:55:38.396+05:30  INFO 22424 --- [ledgersync-test] [           main] com.zaxxer.hikari.pool.HikariPool        : LedgerSyncHikariPool - Added connection conn0: url=jdbc:h2:mem:ledgersynctest user=SA
+2026-11-03T04:55:38.397+05:30  INFO 22424 --- [ledgersync-test] [           main] com.zaxxer.hikari.HikariDataSource       : LedgerSyncHikariPool - Start completed.
+2026-11-03T04:55:40.649+05:30  INFO 22424 --- [ledgersync-test] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-03T04:55:40.780+05:30  INFO 22424 --- [ledgersync-test] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-03T04:55:43.108+05:30  INFO 22424 --- [ledgersync-test] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-03T04:55:47.075+05:30  WARN 22424 --- [ledgersync-test] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+[REDACTED: potentially sensitive log line]
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-11-03T04:55:47.148+05:30  INFO 22424 --- [ledgersync-test] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-03T04:55:48.346+05:30  INFO 22424 --- [ledgersync-test] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2026-11-03T04:55:50.299+05:30  INFO 22424 --- [ledgersync-test] [           main] c.ledgersync.e2e.LedgerSyncEndToEndTest  : Started LedgerSyncEndToEndTest in 17.779 seconds (process running for 18.853)
+2026-11-03T04:55:51.505+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.i.service.WebhookIngestionService    : Webhook successfully ingested and enqueued in inbox: id=evt_1a19e955d7e304821b47af0fa2e, provider=STRIPE, eventId=evt_e2e_test_999, eventType=payment_intent.succeeded
+2026-11-03T04:55:51.524+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.i.service.WebhookIngestionService    : Duplicate webhook received: provider=STRIPE, eventId=evt_e2e_test_999. Skipping duplicate financial processing.
+2026-11-03T04:55:51.527+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.p.service.PaymentProcessingService   : Processing financial event: provider=STRIPE, eventId=evt_e2e_test_999, type=payment_intent.succeeded, paymentId=pi_e2e_test_999
+2026-11-03T04:55:51.550+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.p.service.PaymentProcessingService   : Creating new payment record: internalId=pay_1a19e955e3ec3bfab0f6b1ca4b5, providerPaymentId=pi_e2e_test_999, status=CAPTURED
+2026-11-03T04:55:51.574+05:30  INFO 22424 --- [ledgersync-test] [           main] c.ledgersync.audit.service.AuditService  : Audit recorded: action=PROCESS_PAYMENT_EVENT, resourceType=PAYMENT, resourceId=pay_1a19e955e3ec3bfab0f6b1ca4b5, correlationId=null
+2026-11-03T04:55:51.597+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.p.service.PaymentProcessingService   : Processing financial event: provider=STRIPE, eventId=evt_ref_1, type=charge.refunded, paymentId=pi_e2e_test_999
+2026-11-03T04:55:51.617+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.p.service.PaymentProcessingService   : Refund re_test_001 of 30.00 USD successfully applied to payment pay_1a19e955e3ec3bfab0f6b1ca4b5. New status=PARTIALLY_REFUNDED
+2026-11-03T04:55:51.640+05:30  INFO 22424 --- [ledgersync-test] [           main] c.ledgersync.audit.service.AuditService  : Audit recorded: action=PROCESS_PAYMENT_EVENT, resourceType=PAYMENT, resourceId=pay_1a19e955e3ec3bfab0f6b1ca4b5, correlationId=null
+2026-11-03T04:55:51.660+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.p.service.PaymentProcessingService   : Processing financial event: provider=STRIPE, eventId=evt_ref_excessive, type=charge.refunded, paymentId=pi_e2e_test_999
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 19.57 s -- in com.ledgersync.e2e.LedgerSyncEndToEndTest
+[INFO] Running com.ledgersync.ingestion.WebhookSignatureVerificationTest
+2026-11-03T04:55:51.737+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.i.signature.StripeSignatureVerifier  : Stripe webhook signature mismatch
+2026-11-03T04:55:51.742+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.i.signature.StripeSignatureVerifier  : Stripe webhook timestamp 1793661351 outside tolerance window (current: 1793661951, tolerance: 300s)
+2026-11-03T04:55:51.750+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.i.s.RazorpaySignatureVerifier        : Razorpay webhook signature mismatch
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s -- in com.ledgersync.ingestion.WebhookSignatureVerificationTest
+[INFO] Running com.ledgersync.payment.MonetaryInvariantTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.ledgersync.payment.MonetaryInvariantTest
+[INFO] Running com.ledgersync.payment.PaymentStateMachineTest
+2026-11-03T04:55:51.773+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.payment.service.PaymentStateMachine  : Ignoring out-of-order/stale event requesting FAILED while transaction is already CAPTURED
+2026-11-03T04:55:51.777+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.payment.service.PaymentStateMachine  : Ignoring out-of-order/stale event requesting AUTHORIZED while transaction is already CAPTURED
+2026-11-03T04:55:51.787+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.payment.service.PaymentStateMachine  : Attempted transition from terminal state REFUNDED to AUTHORIZED. Stale event ignored.
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.021 s -- in com.ledgersync.payment.PaymentStateMachineTest
+[INFO] Running com.ledgersync.queue.InboxWorkerAndDeadLetterTest
+2026-11-03T04:55:53.202+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.q.service.DeadLetterRedriveService   : Operator test-admin redrove dead letter message inb_test_dlq
+2026-11-03T04:55:53.305+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.q.worker.AbandonedJobRecoveryWorker  : Detected 1 abandoned jobs stuck in PROCESSING longer than 300s. Recovering...
+2026-11-03T04:55:53.305+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.q.worker.AbandonedJobRecoveryWorker  : Recovering abandoned job inb_stuck: lockedBy=crashed-worker-node-1, lockedAt=2026-11-02T23:15:53.295652300Z
+2026-11-03T04:55:53.332+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.q.service.DeadLetterRedriveService   : Operator test-operator bulk-redrove 2 dead letter messages
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.553 s -- in com.ledgersync.queue.InboxWorkerAndDeadLetterTest
+[INFO] Running com.ledgersync.reconciliation.ReconciliationServiceTest
+2026-11-03T04:55:54.144+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Triggering reconciliation run for provider: STRIPE
+2026-11-03T04:55:54.185+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation discrepancy detected: type=MISSING_IN_LOCAL, severity=CRITICAL, providerPaymentId=pi_missing_123
+2026-11-03T04:55:54.187+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation run rec_1a19e9568614a3ce69f1951a727 finished: provider=STRIPE, remote=1, local=0, discrepancies=1
+2026-11-03T04:55:54.233+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Triggering reconciliation run for provider: STRIPE
+2026-11-03T04:55:54.236+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation discrepancy detected: type=STATUS_MISMATCH, severity=HIGH, providerPaymentId=pi_mismatch_456
+2026-11-03T04:55:54.238+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation run rec_1a19e9568b9a8f242125b87dd97 finished: provider=STRIPE, remote=1, local=1, discrepancies=1
+2026-11-03T04:55:54.260+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Triggering reconciliation run for provider: STRIPE
+2026-11-03T04:55:54.262+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation run rec_1a19e9568d503984bd3d5d0c87a finished: provider=STRIPE, remote=1, local=0, discrepancies=0
+2026-11-03T04:55:54.283+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.s.DiscrepancyResolutionService     : Discrepancy dsc_1 resolved to RESOLVED by admin-user with note: Manually synchronized with Stripe dashboard invoice #9876
+2026-11-03T04:55:54.299+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Triggering reconciliation run for provider: STRIPE
+2026-11-03T04:55:54.305+05:30  WARN 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation discrepancy detected: type=STALE_UNRESOLVED, severity=MEDIUM, providerPaymentId=pi_stale_999
+2026-11-03T04:55:54.306+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.r.service.ReconciliationService      : Reconciliation run rec_1a19e9568fc4c6341797e1c6f71 finished: provider=STRIPE, remote=0, local=0, discrepancies=1
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.937 s -- in com.ledgersync.reconciliation.ReconciliationServiceTest
+[INFO] Running com.ledgersync.security.SecurityAccessTest
+2026-11-03T04:55:54.381+05:30  INFO 22424 --- [ledgersync-test] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.ledgersync.security.SecurityAccessTest]: SecurityAccessTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-03T04:55:54.614+05:30  INFO 22424 --- [ledgersync-test] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.ledgersync.LedgerSyncApplication for test class com.ledgersync.security.SecurityAccessTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2026-11-03T04:55:54.896+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.security.SecurityAccessTest          : Starting SecurityAccessTest using Java 21.0.13 with PID 22424 (started by rishi in E:\ledgerSync)
+2026-11-03T04:55:54.897+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.security.SecurityAccessTest          : No active profile set, falling back to 1 default profile: "default"
+2026-11-03T04:55:56.330+05:30  WARN 22424 --- [ledgersync-test] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+[REDACTED: potentially sensitive log line]
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-11-03T04:55:56.337+05:30  INFO 22424 --- [ledgersync-test] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-03T04:55:57.736+05:30  INFO 22424 --- [ledgersync-test] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-03T04:55:57.737+05:30  INFO 22424 --- [ledgersync-test] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-03T04:55:57.742+05:30  INFO 22424 --- [ledgersync-test] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-11-03T04:55:57.817+05:30  INFO 22424 --- [ledgersync-test] [           main] c.l.security.SecurityAccessTest          : Started SecurityAccessTest in 3.116 seconds (process running for 26.371)
+2026-11-03T04:55:58.426+05:30  WARN 22424 --- [ledgersync-test] [           main] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.343 s -- in com.ledgersync.security.SecurityAccessTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 28, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  39.478 s
+[INFO] Finished at: 2026-11-03T04:56:00+05:30
+[INFO] ------------------------------------------------------------------------
+
