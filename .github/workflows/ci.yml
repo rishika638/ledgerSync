@@ -46,13 +46,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+
       - name: Verify compilation and run tests
         env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/ledgersync
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: postgres
+          SPRING_PROFILES_ACTIVE: test
           SPRING_DATA_REDIS_HOST: localhost
           SPRING_DATA_REDIS_PORT: 6379
         run: java "-Dmaven.multiModuleProjectDirectory=${GITHUB_WORKSPACE}" -cp .mvn/wrapper/maven-wrapper.jar org.apache.maven.wrapper.MavenWrapperMain clean verify -B
+
 
 
