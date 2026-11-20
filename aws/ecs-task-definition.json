@@ -1,0 +1,74 @@
+{
+  "family": "ledgersync-backend-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/ledgersyncBackendTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "ledgersync-api",
+      "image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ledgersync-backend:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "SPRING_PROFILES_ACTIVE", "value": "prod" },
+        { "name": "SERVER_PORT", "value": "8080" },
+        { "name": "SPRING_DATASOURCE_URL", "value": "jdbc:postgresql://${RDS_ENDPOINT}:5432/ledgersync" },
+        { "name": "SPRING_DATASOURCE_USERNAME", "value": "ledgersync_user" },
+        { "name": "SPRING_DATA_REDIS_HOST", "value": "${REDIS_ENDPOINT}" },
+        { "name": "SPRING_DATA_REDIS_PORT", "value": "6379" },
+        { "name": "LEDGERSYNC_SECURITY_ENABLED", "value": "true" },
+        { "name": "GEMINI_MODEL", "value": "gemini-1.5-flash" }
+      ],
+      "secrets": [
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:ledgersync/rds-password"
+        },
+        {
+          "name": "GEMINI_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:ledgersync/gemini-api-key"
+        },
+        {
+          "name": "LEDGERSYNC_SECURITY_API_KEYS_OPERATOR",
+          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:ledgersync/api-keys:operator::"
+        },
+        {
+          "name": "LEDGERSYNC_SECURITY_API_KEYS_ADMIN",
+          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:ledgersync/api-keys:admin::"
+        },
+        {
+          "name": "LEDGERSYNC_SECURITY_API_KEYS_INGESTION",
+          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:ledgersync/api-keys:ingestion::"
+        },
+        {
+          "name": "LEDGERSYNC_WEBHOOK_RAZORPAY_SECRET",
+          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:ledgersync/razorpay-secret"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ledgersync-backend",
+          "awslogs-region": "${AWS_REGION}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"],
+        "interval": 20,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 30
+      }
+    }
+  ]
+}

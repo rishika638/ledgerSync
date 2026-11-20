@@ -2,7 +2,7 @@
 
 ## 1. High-Level System Architecture
 
-LedgerSync is an idempotent payment webhook reconciliation and event-processing engine built as a modular monolith in **Java 21** and **Spring Boot 3.3.x**. It guarantees that at-least-once webhook deliveries from external payment providers (Stripe, Razorpay) are ingested durably, processed asynchronously, and executed with exactly-once financial effects.
+LedgerSync is a modular monolith in **Java 21** and **Spring Boot 3.3.x** with webhook/payment processing and CSV-based three-way finance reconciliation. Webhook delivery is treated as at-least-once: provider-scoped event identity, database transactions, and state checks reduce duplicate effects, but the system does not claim a global exactly-once guarantee.
 
 ```mermaid
 flowchart TD
@@ -41,7 +41,7 @@ flowchart TD
         end
 
         subgraph AuditDomain["Audit & Observability"]
-            AuditService["AuditService<br/>(Append-Only Ledger Trail)"]
+            AuditService["AuditService<br/>(Transactional Application Audit History)"]
             MetricsConfig["MetricsConfig<br/>(Micrometer / Prometheus)"]
         end
 
@@ -230,7 +230,7 @@ sequenceDiagram
     A->>D: POST /api/v1/reconciliation/discrepancies/{id}/resolve
     D->>DB: UPDATE reconciliation_discrepancies SET status = 'RESOLVED', resolution_notes = notes, resolved_by = admin
     D->>DB: INSERT audit_events (action: "RESOLVE_DISCREPANCY", actor: admin)
-    D-->>A: HTTP 200 OK (Discrepancy resolved with immutable audit trail)
+    D-->>A: HTTP 200 OK (Discrepancy resolved with application-recorded audit event)
 ```
 
 ---
@@ -286,7 +286,7 @@ stateDiagram-v2
 | **`InboxWorker`** | Polls database using `FOR UPDATE SKIP LOCKED`, coordinates retries with jitter, and updates message states. | Updates `inbox_messages`. |
 | **`AbandonedJobRecoveryWorker`** | Detects crashed worker locks (`locked_at <= NOW() - 300s`) and resets jobs to `PENDING`. | Updates `inbox_messages`. |
 | **`PaymentProcessingService`** | Validates monetary invariants, applies state transitions, records refunds, and enqueues outbox events. | Writes to `payment_transactions`, `refunds`, `outbox_messages`. |
-| **`AuditService`** | Records append-only, tamper-evident audit records in the same transaction as domain updates. | Writes to `audit_events`. |
+| **`AuditService`** | Records application audit events in the same transaction as domain updates. | Writes to `audit_events`; database administrators can still alter rows. |
 | **`ReconciliationService`** | Queries authoritative provider clients, identifies missing webhooks or drift, and creates discrepancies. | Writes to `reconciliation_runs`, `reconciliation_discrepancies`. |
 | **`DiscrepancyResolutionService`** | Enforces admin-only resolution of discrepancies and preserves investigation evidence. | Updates `reconciliation_discrepancies`, writes to `audit_events`. |
 
@@ -296,12 +296,12 @@ stateDiagram-v2
 
 1. **PostgreSQL SKIP LOCKED vs Kafka**:
    - *Decision*: Built with PostgreSQL `FOR UPDATE SKIP LOCKED` for the transactional inbox.
-   - *Trade-off*: Eliminates dual-write consistency problems between database writes and message broker publishes without requiring two-phase commit (2PC) or Debezium CDC overhead. Perfectly handles high throughput up to thousands of events/sec while keeping operational complexity minimal.
-2. **Exact Minor Units (`long amountCents`) vs Floating Point (`double`)**:
-   - *Decision*: Zero floating-point calculations. Minor units combined with ISO `Currency` codes prevent IEEE 754 precision loss and rounding discrepancies.
+   - *Trade-off*: Keeps the transactional inbox in PostgreSQL and avoids a separate broker dual-write path. Throughput limits have not been benchmarked.
+2. **Exact Minor Units (`long amountMinor`) vs Floating Point (`double`)**:
+   - *Decision*: Persisted financial amounts use integer minor units and CSV amounts are converted with decimal arithmetic; the finance path avoids binary floating-point money calculations.
 3. **Redis as Acceleration vs Source of Truth**:
    - *Decision*: Redis is used strictly for transient leader lease coordination via `OptionalRedisCoordinator`.
-   - *Trade-off*: If Redis crashes, network partitions, or runs out of memory, workers automatically and safely fall back to PostgreSQL row-level locks without dropping a single event or compromising financial invariants.
+   - *Trade-off*: PostgreSQL is the durable queue/state source; tests cover fallback behavior, but production outage recovery and throughput have not been load-tested.
 4. **No Silent Auto-Correction**:
    - *Decision*: When reconciliation discovers discrepancies (e.g. `STATUS_MISMATCH` or `AMOUNT_MISMATCH`), the engine refuses to silently overwrite local balances.
-   - *Trade-off*: Preserves immutable financial evidence for compliance and requires explicit operator review through the authenticated Admin API.
+   - *Trade-off*: Preserves source records and records decisions for review. The application audit history is not a cryptographic or database-admin-proof immutable ledger.

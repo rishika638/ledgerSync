@@ -30,4 +30,26 @@ target/
 
 ### Environment & Secrets ###
 .env
+.env.*
+!.env.example
+!.env.*.example
 *.log
+
+### Build outputs and dependencies ###
+/target/
+/frontend/node_modules/
+/frontend/dist/
+**/node_modules/
+**/dist/
+
+### Local backups and generated files ###
+*.bak
+*.backup
+*.prelauncherfix
+*.local
+*.dump
+*.sql.gz
+/logs/
+/artifacts/
+/playwright-report/
+/test-results/

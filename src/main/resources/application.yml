@@ -1,4 +1,4 @@
-﻿server:
+server:
   port: ${SERVER_PORT:8080}
   shutdown: graceful
 
@@ -8,9 +8,9 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 20s
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ledgersync}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/${POSTGRES_DB:ledgersync}}
+    username: ${SPRING_DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
     hikari:
       pool-name: LedgerSyncHikariPool
@@ -37,7 +37,7 @@ spring:
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
-      port: ${SPRING_DATA_REDIS_PORT:6379}
+      port: ${SPRING_DATA_REDIS_PORT:6380}
       password: ${SPRING_DATA_REDIS_PASSWORD:}
       timeout: 2000ms
 
@@ -61,16 +61,24 @@ ledgersync:
   security:
     enabled: true
     header-name: X-API-Key
+    cors:
+      allowed-origins: ${LEDGERSYNC_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+    operator:
+      username: ${LEDGERSYNC_OPERATOR_USERNAME:operator}
+      password: ${LEDGERSYNC_OPERATOR_PASSWORD:operator}
+    admin:
+      username: ${LEDGERSYNC_ADMIN_USERNAME:admin}
+      password: ${LEDGERSYNC_ADMIN_PASSWORD:admin}
     api-keys:
-      ingestion: ${LEDGERSYNC_SECURITY_API_KEYS_INGESTION}
-      operator: ${LEDGERSYNC_SECURITY_API_KEYS_OPERATOR}
-      admin: ${LEDGERSYNC_SECURITY_API_KEYS_ADMIN}
+      ingestion: ${LEDGERSYNC_SECURITY_API_KEYS_INGESTION:}
+      operator: ${LEDGERSYNC_SECURITY_API_KEYS_OPERATOR:}
+      admin: ${LEDGERSYNC_SECURITY_API_KEYS_ADMIN:}
   webhook:
     stripe:
-      secret: ${LEDGERSYNC_WEBHOOK_STRIPE_SECRET}
+      secret: ${LEDGERSYNC_WEBHOOK_STRIPE_SECRET:}
       tolerance-seconds: 300
     razorpay:
-      secret: ${LEDGERSYNC_WEBHOOK_RAZORPAY_SECRET}
+      secret: ${LEDGERSYNC_WEBHOOK_RAZORPAY_SECRET:}
       tolerance-seconds: 300
   inbox:
     enabled: ${LEDGERSYNC_INBOX_WORKER_ENABLED:true}
@@ -82,6 +90,9 @@ ledgersync:
     enabled: true
     cron: ${LEDGERSYNC_RECONCILIATION_CRON:0 */15 * * * *}
     batch-size: 50
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    model: ${GEMINI_MODEL:gemini-1.5-flash}
 
 # OpenAPI documentation config
 springdoc:
@@ -91,4 +102,3 @@ springdoc:
     path: /swagger-ui.html
     tags-sorter: alpha
     operations-sorter: method
-

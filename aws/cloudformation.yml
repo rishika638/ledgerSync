@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'LedgerSync AWS infrastructure scaffold; not a complete application deployment'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: production
+  DBMasterUsername:
+    Type: String
+    Default: ledgersync_user
+  DBMasterPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 16
+    Description: Supply a unique generated password through a secure deployment channel.
+  GeminiApiKey:
+    Type: String
+    NoEcho: true
+    Default: ""
+
+Conditions:
+  HasGeminiApiKey: !Not [!Equals [!Ref GeminiApiKey, ""]]
+
+Resources:
+  # 1. CloudWatch Log Group
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/ledgersync-backend
+      RetentionInDays: 30
+
+  # 2. VPC & Subnets
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-ledgersync-vpc'
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+
+  # 3. RDS PostgreSQL
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnets for LedgerSync RDS
+      SubnetIds: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow PostgreSQL access to ECS tasks
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 10.0.0.0/16
+
+  RDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 20
+      DBInstanceClass: db.t4g.micro
+      Engine: postgres
+      EngineVersion: '16.3'
+      DBName: ledgersync
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Ref DBMasterPassword
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      VPCSecurityGroups: [!Ref DBSecurityGroup]
+      PubliclyAccessible: false
+      MultiAZ: false
+
+  # 4. Secrets Manager
+  GeminiSecret:
+    Type: AWS::SecretsManager::Secret
+    Condition: HasGeminiApiKey
+    Properties:
+      Name: ledgersync/gemini-api-key
+      SecretString: !Ref GeminiApiKey
+
+  # 5. ECS Cluster
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub '${EnvironmentName}-ledgersync-cluster'
+
+Outputs:
+  RDSEndpoint:
+    Description: PostgreSQL Host Endpoint
+    Value: !GetAtt RDSInstance.Endpoint.Address
+  ECSClusterName:
+    Description: ECS Cluster
+    Value: !Ref ECSCluster

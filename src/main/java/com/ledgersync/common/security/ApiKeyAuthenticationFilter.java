@@ -24,9 +24,9 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
     public ApiKeyAuthenticationFilter(
             @Value("${ledgersync.security.header-name:X-API-Key}") String headerName,
-            @Value("${ledgersync.security.api-keys.ingestion:ingest-secret-key-12345}") String ingestionKey,
-            @Value("${ledgersync.security.api-keys.operator:operator-secret-key-67890}") String operatorKey,
-            @Value("${ledgersync.security.api-keys.admin:admin-secret-key-abcdef}") String adminKey,
+            @Value("${ledgersync.security.api-keys.ingestion:}") String ingestionKey,
+            @Value("${ledgersync.security.api-keys.operator:}") String operatorKey,
+            @Value("${ledgersync.security.api-keys.admin:}") String adminKey,
             @Value("${ledgersync.security.enabled:true}") boolean securityEnabled) {
         this.headerName = headerName;
         this.ingestionKey = ingestionKey;
@@ -38,6 +38,10 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (!securityEnabled) {
             SecurityContextHolder.getContext().setAuthentication(
@@ -48,7 +52,6 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String apiKey = request.getHeader(headerName);
-
         if (apiKey != null && !apiKey.isBlank()) {
             if (apiKey.equals(adminKey)) {
                 SecurityContextHolder.getContext().setAuthentication(

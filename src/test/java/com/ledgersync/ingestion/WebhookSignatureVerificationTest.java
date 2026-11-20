@@ -85,4 +85,15 @@ class WebhookSignatureVerificationTest {
         byte[] payload = "{\"event\":\"payment.captured\"}".getBytes(StandardCharsets.UTF_8);
         assertFalse(razorpayVerifier.verify(payload, "invalid_signature_hex_0000000000000000"));
     }
+
+    @Test
+    @DisplayName("Webhook verifiers fail closed when no signing secret is configured")
+    void testMissingSecretsFailClosed() {
+        byte[] payload = "{\"event\":\"payment.captured\"}".getBytes(StandardCharsets.UTF_8);
+        long timestamp = Instant.now().getEpochSecond();
+        String stripeHeader = "t=" + timestamp + ",v1=00";
+
+        assertFalse(new StripeSignatureVerifier("", 300).verify(payload, stripeHeader));
+        assertFalse(new RazorpaySignatureVerifier("").verify(payload, "00"));
+    }
 }

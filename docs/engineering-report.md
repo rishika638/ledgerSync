@@ -1,9 +1,11 @@
-# LedgerSync — Senior Engineering Implementation Report
+# LedgerSync — Historical Webhook Foundation Report
 
 **Author**: Senior Distributed Systems & Backend Engineer  
 **Project**: LedgerSync — Idempotent Payment Webhook Reconciliation & Event-Processing Engine  
 **Language / Framework**: Java 21 / Spring Boot 3.3.4  
 **Date**: October 2026  
+
+> This historical report describes the webhook/payment foundation and is not a current release verification or deployment claim. For the current five-phase LedgerSync status, use [FINAL_ENGINEERING_VERIFICATION.md](./FINAL_ENGINEERING_VERIFICATION.md).
 
 ---
 
@@ -68,7 +70,7 @@ e:\ledgerSync\
 │   │   ├── dto/                               # ReconciliationRunResponse, DiscrepancyResponse, ResolveDiscrepancyRequest
 │   │   └── controller/                        # ReconciliationController
 │   ├── audit/
-│   │   ├── model/                             # AuditEventEntity (append-only audit history)
+│   │   ├── model/                             # AuditEventEntity (application-recorded audit history)
 │   │   ├── repository/                        # AuditEventRepository
 │   │   ├── service/                           # AuditService
 │   │   └── controller/                        # AuditController
@@ -94,7 +96,7 @@ All persistence definitions are managed in versioned Flyway migrations:
 3. **`outbox_messages`**: Transactional outbox pattern for reliable external notifications.
 4. **`payment_transactions`**: Authoritative domain model storing currency, amounts in cents, status, and an optimistic locking `@Version` counter.
 5. **`refunds`**: Subordinate refund entities enforcing `uk_refund_provider_refund_id` on `(payment_id, provider_refund_id)`.
-6. **`audit_events`**: Append-only log recording actor, action, resource type, before-state JSON, and after-state JSON.
+6. **`audit_events`**: Application-recorded log with actor, action, resource type, and before/after state. It is not tamper-proof against database administrators.
 7. **`reconciliation_runs` & `reconciliation_discrepancies`**: Audit ledger recording run metrics and detected discrepancies.
 
 ### 3.2 Financial Invariants & Partial Indexes (`V2__indexes_and_constraints.sql`)
@@ -145,7 +147,7 @@ CREATE INDEX idx_inbox_stuck_recovery
 | `GET` | `/api/v1/reconciliation/runs` | `ROLE_OPERATOR`, `ROLE_ADMIN` | List reconciliation run history |
 | `GET` | `/api/v1/reconciliation/discrepancies` | `ROLE_OPERATOR`, `ROLE_ADMIN` | Query detected discrepancies by status |
 | `POST` | `/api/v1/reconciliation/discrepancies/{id}/resolve`| `ROLE_ADMIN` | Resolve discrepancy with investigation note |
-| `GET` | `/api/v1/audit/resources/{type}/{id}` | `ROLE_OPERATOR`, `ROLE_ADMIN` | Query append-only audit trail |
+| `GET` | `/api/v1/audit/resources/{type}/{id}` | `ROLE_OPERATOR`, `ROLE_ADMIN` | Query application-recorded audit history |
 | `GET` | `/api/v1/audit/correlation/{correlationId}` | `ROLE_OPERATOR`, `ROLE_ADMIN` | Query audit records by correlation ID |
 | `GET` | `/actuator/health` | Public | Liveness and readiness health checks |
 | `GET` | `/actuator/prometheus` | Public | Prometheus Micrometer metrics scrape |
@@ -198,7 +200,7 @@ Reconciliation runs periodically or on-demand:
    - **`UNEXPECTED_REFUND`** (High): Provider reports refunds not reflected locally.
    - **`STALE_UNRESOLVED`** (Medium): Local payments in `CREATED` or `AUTHORIZED` for > 24 hours without settlement.
 3. **Idempotent Storage**: Queries existing active discrepancies (`status IN ('OPEN', 'INVESTIGATING')`) for each payment ID and discrepancy type. Repeated runs never generate duplicate open discrepancies.
-4. **Preservation of Evidence**: Discrepancies are never silently auto-corrected. Operators investigate evidence JSON and resolve issues via `POST /api/v1/reconciliation/discrepancies/{id}/resolve`, which writes an immutable entry to `audit_events`.
+4. **Preservation of Evidence**: Discrepancies are not silently auto-corrected. Operator actions are recorded in `audit_events`; the application history is not a cryptographic write-once archive.
 
 ---
 
@@ -206,7 +208,7 @@ Reconciliation runs periodically or on-demand:
 
 ### Status Summary
 - **Source Code**: **`IMPLEMENTED`** (Defensively coded across all domains).
-- **Automated Tests**: **`NOT VERIFIED`** (Automated runner execution was skipped because Maven was not present on the environment PATH).
+- **Automated Tests**: **47 passed** on 2026-11-21 via `.\mvnw.cmd test`; this does not verify production infrastructure, a live Gemini request, or the unapplied V6 migration on the persistent local database.
 
 ### Test Commands to Run
 ```powershell

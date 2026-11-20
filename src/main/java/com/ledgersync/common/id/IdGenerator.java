@@ -61,4 +61,24 @@ public final class IdGenerator {
     public static String discrepancyId() {
         return generate("dsc");
     }
+
+    public static String importBatchId() {
+        return generate("bat");
+    }
+
+    public static String financeRecordId() {
+        return generate("frec");
+    }
+
+    public static String reconciliationMatchId() {
+        return generate("mtc");
+    }
+
+    public static String investigationId() {
+        return generate("inv");
+    }
+
+    public static String resolutionActionId() {
+        return generate("act");
+    }
 }

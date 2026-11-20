@@ -6,8 +6,10 @@ import org.slf4j.MDC;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -94,6 +96,32 @@ public class GlobalExceptionHandler {
                 correlationId
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        String correlationId = MDC.get(CORRELATION_ID_KEY);
+        log.warn("Access denied [correlationId={}]: {}", correlationId, ex.getMessage());
+
+        ErrorResponse response = ErrorResponse.of(
+                "FORBIDDEN",
+                "You are not authorized to perform this action.",
+                HttpStatus.FORBIDDEN.value(),
+                correlationId
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
+        String correlationId = MDC.get(CORRELATION_ID_KEY);
+        ErrorResponse response = ErrorResponse.of(
+                "NOT_FOUND",
+                "The requested resource was not found.",
+                HttpStatus.NOT_FOUND.value(),
+                correlationId
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(Exception.class)

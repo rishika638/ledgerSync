@@ -1,11 +1,11 @@
 # LedgerSync — Claim Verification Matrix
 
-This matrix maps every requirement, architecture decision, and engineering claim from the LedgerSync specification directly to concrete source code files, automated test classes, implementation status, and exact manual/automated verification instructions.
+This matrix maps selected requirements and claims to implementation and tests. The row-level status snapshot is historical and must be read alongside [FINAL_ENGINEERING_VERIFICATION.md](./FINAL_ENGINEERING_VERIFICATION.md), which records the current 47-test suite result and outstanding database/Gemini blockers.
 
 ### Reporting Status Definitions
 - **IMPLEMENTED**: Complete, defensively coded source implementation is present in the codebase.
 - **TESTED**: Verified behavior backed by executed automated tests.
-- **NOT VERIFIED**: Code and test classes exist, but automated test suite execution was skipped due to local environment runner absence (e.g. Maven not on PATH). Exact verification command is provided.
+- **NOT VERIFIED**: No current execution evidence for the specific behavior; a passing full suite does not prove untested scenarios or live-service behavior.
 - **PARTIALLY IMPLEMENTED**: Basic support exists but specific edge cases or production connectors are deferred.
 - **NOT IMPLEMENTED**: Feature intentionally excluded or not present.
 
@@ -41,10 +41,10 @@ This matrix maps every requirement, architecture decision, and engineering claim
 | **4.5** | Never silently auto-correct ambiguous financial discrepancies; preserve investigation evidence | `ReconciliationService.java`, `DiscrepancyResolutionService.java` | `ReconciliationServiceTest.java` | **IMPLEMENTED** (Code present; execution **NOT VERIFIED**) | Review code in `ReconciliationService.java` and test `testDiscrepancyResolution` |
 | **5.1** | Secure operational APIs with appropriate authentication, authorization and role checks | `SecurityConfig.java`, `ApiKeyAuthenticationFilter.java` | `SecurityAccessTest.java` | **IMPLEMENTED** (Code present; execution **NOT VERIFIED**) | `.\mvnw.cmd test -Dtest=SecurityAccessTest` |
 | **5.2** | Store secrets only in configuration/env; exclude sensitive data and card numbers from logs | `application.yml`, `CorrelationIdFilter.java`, `.env.example` | Code inspection | **IMPLEMENTED** | Verify `.env.example` and logging patterns across codebase |
-| **5.3** | Append-only audit history, correlation IDs, structured logs and metrics | `AuditService.java`, `CorrelationIdFilter.java`, `MetricsConfig.java` | `LedgerSyncEndToEndTest.java` | **IMPLEMENTED** (Code present; execution **NOT VERIFIED**) | Query `GET /actuator/prometheus` and `audit_events` table |
+| **5.3** | Transactional application audit history, correlation IDs, structured logs and metrics | `AuditService.java`, `CorrelationIdFilter.java`, `MetricsConfig.java` | `LedgerSyncEndToEndTest.java`, `ResolutionServiceIntegrationTest.java` | **PARTIALLY VERIFIED** (transactional audit persistence is covered; correlation, log format and metrics endpoint not individually checked; database administrators can alter audit rows) | `.\mvnw.cmd test`; see current evidence in `FINAL_ENGINEERING_VERIFICATION.md` |
 | **5.4** | Health/readiness endpoints and document how to inspect metrics | `application.yml` (Actuator probes enabled) | Integration check | **IMPLEMENTED** | Query `GET /actuator/health` and `GET /actuator/health/readiness` |
 | **6.1** | REST API with versioned endpoints for webhooks, transactions, queue, reconciliation, audit and health | `WebhookIngestionController.java`, `PaymentController.java`, `QueueManagementController.java`, `ReconciliationController.java`, `AuditController.java` | `SecurityAccessTest.java`, `LedgerSyncEndToEndTest.java` | **IMPLEMENTED** (Code present; execution **NOT VERIFIED**) | Browse Swagger UI at `http://localhost:8080/swagger-ui/index.html` |
-| **7.1** | Flyway migrations for all core entities with justified indexes, foreign keys, unique constraints, and invariants | `V1__init_schema.sql`, `V2__indexes_and_constraints.sql` | Integration check | **IMPLEMENTED** | Run `.\mvnw.cmd flyway:migrate` or start app with `SPRING_FLYWAY_ENABLED=true` |
+| **7.1** | Flyway migrations for core entities with indexes, foreign keys, unique constraints, and invariants | `V1__init_schema.sql` through `V6__import_idempotency_and_run_batch_scope.sql` | Integration tests use the test profile; V6 has not run against existing PostgreSQL data | **PARTIAL** | Apply only to a dedicated database; do not migrate the persistent local database without approval. |
 | **7.2** | Automated unit, concurrency, reconciliation, and integration tests | All test classes under `src/test/java/com/ledgersync/` | CI workflow | **IMPLEMENTED** (Code present; execution **NOT VERIFIED**) | `.\mvnw.cmd clean test` |
 | **8.1** | Local setup, Docker Compose, .env.example, scripts, and documentation | `docker-compose.yml`, `.env.example`, `scripts/*.ps1`, `README.md` | Manual execution | **IMPLEMENTED** | Run `powershell -File scripts/run-local.ps1` |
 
@@ -55,6 +55,6 @@ This matrix maps every requirement, architecture decision, and engineering claim
 To uphold distributed systems honesty and avoid inflated claims:
 1. **PCI-DSS Compliance**: NOT CLAIMED. LedgerSync does not store, transmit, or process raw Primary Account Numbers (PANs), CVVs, or magnetic stripe data. All records store provider token identifiers (`pi_...`, `pay_...`, `cus_...`).
 2. **Distributed Tracing**: PARTIALLY IMPLEMENTED. Correlation IDs (`X-Correlation-Id`) and W3C TraceContext headers (`traceparent`) are propagated across HTTP headers, MDC logs, and message payloads. Full distributed tracing (e.g. OpenTelemetry OTLP remote collector exports, distributed span trees) is not bundled.
-3. **Hardware Write-Once (WORM) Storage**: NOT CLAIMED. Audit immutability is enforced at the application tier and PostgreSQL schema permissions, not by hardware-enforced optical WORM media or cryptographic blockchain merkle trees.
-4. **Exactly-Once Transport Delivery**: IMPOSSIBLE OVER NETWORKS. The engine guarantees **at-least-once transport delivery** combined with **idempotent, exactly-once financial execution effects** via database uniqueness constraints and explicit state transitions.
+3. **Hardware Write-Once (WORM) Storage**: NOT CLAIMED. Audit events are application-recorded; they are not cryptographically immutable and database administrators can alter stored rows.
+4. **Exactly-Once Delivery or Effects**: NOT CLAIMED. Webhooks are at-least-once; provider-scoped deduplication and transactional state checks reduce duplicate effects, but global exactly-once financial execution is not guaranteed.
 5. **Live Payment Gateway Sandbox**: NOT CLAIMED. The local environment uses deterministic in-memory simulator fixtures (`MockStripeClient`, `MockRazorpayClient`) that implement the `PaymentProviderClient` interface.

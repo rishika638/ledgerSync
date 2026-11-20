@@ -1,0 +1,1326 @@
+{
+  "generated_at": "2026-11-19T20:17:24.457377900Z",
+  "total_payments": 165,
+  "cases": [
+    {
+      "payment_index": 1,
+      "payment_ref": "PAY-0001",
+      "order_ref": "ORD-0001",
+      "gateway_payment_id": "pay_Rzp0001",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 2,
+      "payment_ref": "PAY-0002",
+      "order_ref": "ORD-0002",
+      "gateway_payment_id": "pay_Rzp0002",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 3,
+      "payment_ref": "PAY-0003",
+      "order_ref": "ORD-0003",
+      "gateway_payment_id": "pay_Rzp0003",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 4,
+      "payment_ref": "PAY-0004",
+      "order_ref": "ORD-0004",
+      "gateway_payment_id": "pay_Rzp0004",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 5,
+      "payment_ref": "PAY-0005",
+      "order_ref": "ORD-0005",
+      "gateway_payment_id": "pay_Rzp0005",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 6,
+      "payment_ref": "PAY-0006",
+      "order_ref": "ORD-0006",
+      "gateway_payment_id": "pay_Rzp0006",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 7,
+      "payment_ref": "PAY-0007",
+      "order_ref": "ORD-0007",
+      "gateway_payment_id": "pay_Rzp0007",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 8,
+      "payment_ref": "PAY-0008",
+      "order_ref": "ORD-0008",
+      "gateway_payment_id": "pay_Rzp0008",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 9,
+      "payment_ref": "PAY-0009",
+      "order_ref": "ORD-0009",
+      "gateway_payment_id": "pay_Rzp0009",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 10,
+      "payment_ref": "PAY-0010",
+      "order_ref": "ORD-0010",
+      "gateway_payment_id": "pay_Rzp0010",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 11,
+      "payment_ref": "PAY-0011",
+      "order_ref": "ORD-0011",
+      "gateway_payment_id": "pay_Rzp0011",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 12,
+      "payment_ref": "PAY-0012",
+      "order_ref": "ORD-0012",
+      "gateway_payment_id": "pay_Rzp0012",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 13,
+      "payment_ref": "PAY-0013",
+      "order_ref": "ORD-0013",
+      "gateway_payment_id": "pay_Rzp0013",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 14,
+      "payment_ref": "PAY-0014",
+      "order_ref": "ORD-0014",
+      "gateway_payment_id": "pay_Rzp0014",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 15,
+      "payment_ref": "PAY-0015",
+      "order_ref": "ORD-0015",
+      "gateway_payment_id": "pay_Rzp0015",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 16,
+      "payment_ref": "PAY-0016",
+      "order_ref": "ORD-0016",
+      "gateway_payment_id": "pay_Rzp0016",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 17,
+      "payment_ref": "PAY-0017",
+      "order_ref": "ORD-0017",
+      "gateway_payment_id": "pay_Rzp0017",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 18,
+      "payment_ref": "PAY-0018",
+      "order_ref": "ORD-0018",
+      "gateway_payment_id": "pay_Rzp0018",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 19,
+      "payment_ref": "PAY-0019",
+      "order_ref": "ORD-0019",
+      "gateway_payment_id": "pay_Rzp0019",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 20,
+      "payment_ref": "PAY-0020",
+      "order_ref": "ORD-0020",
+      "gateway_payment_id": "pay_Rzp0020",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 21,
+      "payment_ref": "PAY-0021",
+      "order_ref": "ORD-0021",
+      "gateway_payment_id": "pay_Rzp0021",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 22,
+      "payment_ref": "PAY-0022",
+      "order_ref": "ORD-0022",
+      "gateway_payment_id": "pay_Rzp0022",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 23,
+      "payment_ref": "PAY-0023",
+      "order_ref": "ORD-0023",
+      "gateway_payment_id": "pay_Rzp0023",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 24,
+      "payment_ref": "PAY-0024",
+      "order_ref": "ORD-0024",
+      "gateway_payment_id": "pay_Rzp0024",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 25,
+      "payment_ref": "PAY-0025",
+      "order_ref": "ORD-0025",
+      "gateway_payment_id": "pay_Rzp0025",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 26,
+      "payment_ref": "PAY-0026",
+      "order_ref": "ORD-0026",
+      "gateway_payment_id": "pay_Rzp0026",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 27,
+      "payment_ref": "PAY-0027",
+      "order_ref": "ORD-0027",
+      "gateway_payment_id": "pay_Rzp0027",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 28,
+      "payment_ref": "PAY-0028",
+      "order_ref": "ORD-0028",
+      "gateway_payment_id": "pay_Rzp0028",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 29,
+      "payment_ref": "PAY-0029",
+      "order_ref": "ORD-0029",
+      "gateway_payment_id": "pay_Rzp0029",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 30,
+      "payment_ref": "PAY-0030",
+      "order_ref": "ORD-0030",
+      "gateway_payment_id": "pay_Rzp0030",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 31,
+      "payment_ref": "PAY-0031",
+      "order_ref": "ORD-0031",
+      "gateway_payment_id": "pay_Rzp0031",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 32,
+      "payment_ref": "PAY-0032",
+      "order_ref": "ORD-0032",
+      "gateway_payment_id": "pay_Rzp0032",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 33,
+      "payment_ref": "PAY-0033",
+      "order_ref": "ORD-0033",
+      "gateway_payment_id": "pay_Rzp0033",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 34,
+      "payment_ref": "PAY-0034",
+      "order_ref": "ORD-0034",
+      "gateway_payment_id": "pay_Rzp0034",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 35,
+      "payment_ref": "PAY-0035",
+      "order_ref": "ORD-0035",
+      "gateway_payment_id": "pay_Rzp0035",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 36,
+      "payment_ref": "PAY-0036",
+      "order_ref": "ORD-0036",
+      "gateway_payment_id": "pay_Rzp0036",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 37,
+      "payment_ref": "PAY-0037",
+      "order_ref": "ORD-0037",
+      "gateway_payment_id": "pay_Rzp0037",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 38,
+      "payment_ref": "PAY-0038",
+      "order_ref": "ORD-0038",
+      "gateway_payment_id": "pay_Rzp0038",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 39,
+      "payment_ref": "PAY-0039",
+      "order_ref": "ORD-0039",
+      "gateway_payment_id": "pay_Rzp0039",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 40,
+      "payment_ref": "PAY-0040",
+      "order_ref": "ORD-0040",
+      "gateway_payment_id": "pay_Rzp0040",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 41,
+      "payment_ref": "PAY-0041",
+      "order_ref": "ORD-0041",
+      "gateway_payment_id": "pay_Rzp0041",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 42,
+      "payment_ref": "PAY-0042",
+      "order_ref": "ORD-0042",
+      "gateway_payment_id": "pay_Rzp0042",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 43,
+      "payment_ref": "PAY-0043",
+      "order_ref": "ORD-0043",
+      "gateway_payment_id": "pay_Rzp0043",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 44,
+      "payment_ref": "PAY-0044",
+      "order_ref": "ORD-0044",
+      "gateway_payment_id": "pay_Rzp0044",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 45,
+      "payment_ref": "PAY-0045",
+      "order_ref": "ORD-0045",
+      "gateway_payment_id": "pay_Rzp0045",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 46,
+      "payment_ref": "PAY-0046",
+      "order_ref": "ORD-0046",
+      "gateway_payment_id": "pay_Rzp0046",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 47,
+      "payment_ref": "PAY-0047",
+      "order_ref": "ORD-0047",
+      "gateway_payment_id": "pay_Rzp0047",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 48,
+      "payment_ref": "PAY-0048",
+      "order_ref": "ORD-0048",
+      "gateway_payment_id": "pay_Rzp0048",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 49,
+      "payment_ref": "PAY-0049",
+      "order_ref": "ORD-0049",
+      "gateway_payment_id": "pay_Rzp0049",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 50,
+      "payment_ref": "PAY-0050",
+      "order_ref": "ORD-0050",
+      "gateway_payment_id": "pay_Rzp0050",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 51,
+      "payment_ref": "PAY-0051",
+      "order_ref": "ORD-0051",
+      "gateway_payment_id": "pay_Rzp0051",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 52,
+      "payment_ref": "PAY-0052",
+      "order_ref": "ORD-0052",
+      "gateway_payment_id": "pay_Rzp0052",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 53,
+      "payment_ref": "PAY-0053",
+      "order_ref": "ORD-0053",
+      "gateway_payment_id": "pay_Rzp0053",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 54,
+      "payment_ref": "PAY-0054",
+      "order_ref": "ORD-0054",
+      "gateway_payment_id": "pay_Rzp0054",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 55,
+      "payment_ref": "PAY-0055",
+      "order_ref": "ORD-0055",
+      "gateway_payment_id": "pay_Rzp0055",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 56,
+      "payment_ref": "PAY-0056",
+      "order_ref": "ORD-0056",
+      "gateway_payment_id": "pay_Rzp0056",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 57,
+      "payment_ref": "PAY-0057",
+      "order_ref": "ORD-0057",
+      "gateway_payment_id": "pay_Rzp0057",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 58,
+      "payment_ref": "PAY-0058",
+      "order_ref": "ORD-0058",
+      "gateway_payment_id": "pay_Rzp0058",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 59,
+      "payment_ref": "PAY-0059",
+      "order_ref": "ORD-0059",
+      "gateway_payment_id": "pay_Rzp0059",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 60,
+      "payment_ref": "PAY-0060",
+      "order_ref": "ORD-0060",
+      "gateway_payment_id": "pay_Rzp0060",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 61,
+      "payment_ref": "PAY-0061",
+      "order_ref": "ORD-0061",
+      "gateway_payment_id": "pay_Rzp0061",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 62,
+      "payment_ref": "PAY-0062",
+      "order_ref": "ORD-0062",
+      "gateway_payment_id": "pay_Rzp0062",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 63,
+      "payment_ref": "PAY-0063",
+      "order_ref": "ORD-0063",
+      "gateway_payment_id": "pay_Rzp0063",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 64,
+      "payment_ref": "PAY-0064",
+      "order_ref": "ORD-0064",
+      "gateway_payment_id": "pay_Rzp0064",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 65,
+      "payment_ref": "PAY-0065",
+      "order_ref": "ORD-0065",
+      "gateway_payment_id": "pay_Rzp0065",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 66,
+      "payment_ref": "PAY-0066",
+      "order_ref": "ORD-0066",
+      "gateway_payment_id": "pay_Rzp0066",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 67,
+      "payment_ref": "PAY-0067",
+      "order_ref": "ORD-0067",
+      "gateway_payment_id": "pay_Rzp0067",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 68,
+      "payment_ref": "PAY-0068",
+      "order_ref": "ORD-0068",
+      "gateway_payment_id": "pay_Rzp0068",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 69,
+      "payment_ref": "PAY-0069",
+      "order_ref": "ORD-0069",
+      "gateway_payment_id": "pay_Rzp0069",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 70,
+      "payment_ref": "PAY-0070",
+      "order_ref": "ORD-0070",
+      "gateway_payment_id": "pay_Rzp0070",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 71,
+      "payment_ref": "PAY-0071",
+      "order_ref": "ORD-0071",
+      "gateway_payment_id": "pay_Rzp0071",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 72,
+      "payment_ref": "PAY-0072",
+      "order_ref": "ORD-0072",
+      "gateway_payment_id": "pay_Rzp0072",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 73,
+      "payment_ref": "PAY-0073",
+      "order_ref": "ORD-0073",
+      "gateway_payment_id": "pay_Rzp0073",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 74,
+      "payment_ref": "PAY-0074",
+      "order_ref": "ORD-0074",
+      "gateway_payment_id": "pay_Rzp0074",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 75,
+      "payment_ref": "PAY-0075",
+      "order_ref": "ORD-0075",
+      "gateway_payment_id": "pay_Rzp0075",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 76,
+      "payment_ref": "PAY-0076",
+      "order_ref": "ORD-0076",
+      "gateway_payment_id": "pay_Rzp0076",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 77,
+      "payment_ref": "PAY-0077",
+      "order_ref": "ORD-0077",
+      "gateway_payment_id": "pay_Rzp0077",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 78,
+      "payment_ref": "PAY-0078",
+      "order_ref": "ORD-0078",
+      "gateway_payment_id": "pay_Rzp0078",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 79,
+      "payment_ref": "PAY-0079",
+      "order_ref": "ORD-0079",
+      "gateway_payment_id": "pay_Rzp0079",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 80,
+      "payment_ref": "PAY-0080",
+      "order_ref": "ORD-0080",
+      "gateway_payment_id": "pay_Rzp0080",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 81,
+      "payment_ref": "PAY-0081",
+      "order_ref": "ORD-0081",
+      "gateway_payment_id": "pay_Rzp0081",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 82,
+      "payment_ref": "PAY-0082",
+      "order_ref": "ORD-0082",
+      "gateway_payment_id": "pay_Rzp0082",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 83,
+      "payment_ref": "PAY-0083",
+      "order_ref": "ORD-0083",
+      "gateway_payment_id": "pay_Rzp0083",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 84,
+      "payment_ref": "PAY-0084",
+      "order_ref": "ORD-0084",
+      "gateway_payment_id": "pay_Rzp0084",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 85,
+      "payment_ref": "PAY-0085",
+      "order_ref": "ORD-0085",
+      "gateway_payment_id": "pay_Rzp0085",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 86,
+      "payment_ref": "PAY-0086",
+      "order_ref": "ORD-0086",
+      "gateway_payment_id": "pay_Rzp0086",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 87,
+      "payment_ref": "PAY-0087",
+      "order_ref": "ORD-0087",
+      "gateway_payment_id": "pay_Rzp0087",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 88,
+      "payment_ref": "PAY-0088",
+      "order_ref": "ORD-0088",
+      "gateway_payment_id": "pay_Rzp0088",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 89,
+      "payment_ref": "PAY-0089",
+      "order_ref": "ORD-0089",
+      "gateway_payment_id": "pay_Rzp0089",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 90,
+      "payment_ref": "PAY-0090",
+      "order_ref": "ORD-0090",
+      "gateway_payment_id": "pay_Rzp0090",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 91,
+      "payment_ref": "PAY-0091",
+      "order_ref": "ORD-0091",
+      "gateway_payment_id": "pay_Rzp0091",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 92,
+      "payment_ref": "PAY-0092",
+      "order_ref": "ORD-0092",
+      "gateway_payment_id": "pay_Rzp0092",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 93,
+      "payment_ref": "PAY-0093",
+      "order_ref": "ORD-0093",
+      "gateway_payment_id": "pay_Rzp0093",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 94,
+      "payment_ref": "PAY-0094",
+      "order_ref": "ORD-0094",
+      "gateway_payment_id": "pay_Rzp0094",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 95,
+      "payment_ref": "PAY-0095",
+      "order_ref": "ORD-0095",
+      "gateway_payment_id": "pay_Rzp0095",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 96,
+      "payment_ref": "PAY-0096",
+      "order_ref": "ORD-0096",
+      "gateway_payment_id": "pay_Rzp0096",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 97,
+      "payment_ref": "PAY-0097",
+      "order_ref": "ORD-0097",
+      "gateway_payment_id": "pay_Rzp0097",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 98,
+      "payment_ref": "PAY-0098",
+      "order_ref": "ORD-0098",
+      "gateway_payment_id": "pay_Rzp0098",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 99,
+      "payment_ref": "PAY-0099",
+      "order_ref": "ORD-0099",
+      "gateway_payment_id": "pay_Rzp0099",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 100,
+      "payment_ref": "PAY-0100",
+      "order_ref": "ORD-0100",
+      "gateway_payment_id": "pay_Rzp0100",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 101,
+      "payment_ref": "PAY-0101",
+      "order_ref": "ORD-0101",
+      "gateway_payment_id": "pay_Rzp0101",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 102,
+      "payment_ref": "PAY-0102",
+      "order_ref": "ORD-0102",
+      "gateway_payment_id": "pay_Rzp0102",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 103,
+      "payment_ref": "PAY-0103",
+      "order_ref": "ORD-0103",
+      "gateway_payment_id": "pay_Rzp0103",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 104,
+      "payment_ref": "PAY-0104",
+      "order_ref": "ORD-0104",
+      "gateway_payment_id": "pay_Rzp0104",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 105,
+      "payment_ref": "PAY-0105",
+      "order_ref": "ORD-0105",
+      "gateway_payment_id": "pay_Rzp0105",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 106,
+      "payment_ref": "PAY-0106",
+      "order_ref": "ORD-0106",
+      "gateway_payment_id": "pay_Rzp0106",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 107,
+      "payment_ref": "PAY-0107",
+      "order_ref": "ORD-0107",
+      "gateway_payment_id": "pay_Rzp0107",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 108,
+      "payment_ref": "PAY-0108",
+      "order_ref": "ORD-0108",
+      "gateway_payment_id": "pay_Rzp0108",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 109,
+      "payment_ref": "PAY-0109",
+      "order_ref": "ORD-0109",
+      "gateway_payment_id": "pay_Rzp0109",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 110,
+      "payment_ref": "PAY-0110",
+      "order_ref": "ORD-0110",
+      "gateway_payment_id": "pay_Rzp0110",
+      "category": "CLEAN_3WAY_MATCH",
+      "expected_discrepancy": null
+    },
+    {
+      "payment_index": 111,
+      "payment_ref": "PAY-0111",
+      "order_ref": "ORD-0111",
+      "gateway_payment_id": "pay_Rzp0111",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 112,
+      "payment_ref": "PAY-0112",
+      "order_ref": "ORD-0112",
+      "gateway_payment_id": "pay_Rzp0112",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 113,
+      "payment_ref": "PAY-0113",
+      "order_ref": "ORD-0113",
+      "gateway_payment_id": "pay_Rzp0113",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 114,
+      "payment_ref": "PAY-0114",
+      "order_ref": "ORD-0114",
+      "gateway_payment_id": "pay_Rzp0114",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 115,
+      "payment_ref": "PAY-0115",
+      "order_ref": "ORD-0115",
+      "gateway_payment_id": "pay_Rzp0115",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 116,
+      "payment_ref": "PAY-0116",
+      "order_ref": "ORD-0116",
+      "gateway_payment_id": "pay_Rzp0116",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 117,
+      "payment_ref": "PAY-0117",
+      "order_ref": "ORD-0117",
+      "gateway_payment_id": "pay_Rzp0117",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 118,
+      "payment_ref": "PAY-0118",
+      "order_ref": "ORD-0118",
+      "gateway_payment_id": "pay_Rzp0118",
+      "category": "MISSING_GATEWAY",
+      "expected_discrepancy": "MISSING_GATEWAY"
+    },
+    {
+      "payment_index": 119,
+      "payment_ref": "PAY-0119",
+      "order_ref": "ORD-0119",
+      "gateway_payment_id": "pay_Rzp0119",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 120,
+      "payment_ref": "PAY-0120",
+      "order_ref": "ORD-0120",
+      "gateway_payment_id": "pay_Rzp0120",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 121,
+      "payment_ref": "PAY-0121",
+      "order_ref": "ORD-0121",
+      "gateway_payment_id": "pay_Rzp0121",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 122,
+      "payment_ref": "PAY-0122",
+      "order_ref": "ORD-0122",
+      "gateway_payment_id": "pay_Rzp0122",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 123,
+      "payment_ref": "PAY-0123",
+      "order_ref": "ORD-0123",
+      "gateway_payment_id": "pay_Rzp0123",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 124,
+      "payment_ref": "PAY-0124",
+      "order_ref": "ORD-0124",
+      "gateway_payment_id": "pay_Rzp0124",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 125,
+      "payment_ref": "PAY-0125",
+      "order_ref": "ORD-0125",
+      "gateway_payment_id": "pay_Rzp0125",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 126,
+      "payment_ref": "PAY-0126",
+      "order_ref": "ORD-0126",
+      "gateway_payment_id": "pay_Rzp0126",
+      "category": "MISSING_BANK",
+      "expected_discrepancy": "MISSING_BANK"
+    },
+    {
+      "payment_index": 127,
+      "payment_ref": "PAY-0127",
+      "order_ref": "ORD-0127",
+      "gateway_payment_id": "pay_Rzp0127",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 128,
+      "payment_ref": "PAY-0128",
+      "order_ref": "ORD-0128",
+      "gateway_payment_id": "pay_Rzp0128",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 129,
+      "payment_ref": "PAY-0129",
+      "order_ref": "ORD-0129",
+      "gateway_payment_id": "pay_Rzp0129",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 130,
+      "payment_ref": "PAY-0130",
+      "order_ref": "ORD-0130",
+      "gateway_payment_id": "pay_Rzp0130",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 131,
+      "payment_ref": "PAY-0131",
+      "order_ref": "ORD-0131",
+      "gateway_payment_id": "pay_Rzp0131",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 132,
+      "payment_ref": "PAY-0132",
+      "order_ref": "ORD-0132",
+      "gateway_payment_id": "pay_Rzp0132",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 133,
+      "payment_ref": "PAY-0133",
+      "order_ref": "ORD-0133",
+      "gateway_payment_id": "pay_Rzp0133",
+      "category": "AMOUNT_MISMATCH",
+      "expected_discrepancy": "AMOUNT_MISMATCH"
+    },
+    {
+      "payment_index": 134,
+      "payment_ref": "PAY-0134",
+      "order_ref": "ORD-0134",
+      "gateway_payment_id": "pay_Rzp0134",
+      "category": "DUPLICATE_RECORD",
+      "expected_discrepancy": "DUPLICATE_RECORD"
+    },
+    {
+      "payment_index": 135,
+      "payment_ref": "PAY-0135",
+      "order_ref": "ORD-0135",
+      "gateway_payment_id": "pay_Rzp0135",
+      "category": "DUPLICATE_RECORD",
+      "expected_discrepancy": "DUPLICATE_RECORD"
+    },
+    {
+      "payment_index": 136,
+      "payment_ref": "PAY-0136",
+      "order_ref": "ORD-0136",
+      "gateway_payment_id": "pay_Rzp0136",
+      "category": "DUPLICATE_RECORD",
+      "expected_discrepancy": "DUPLICATE_RECORD"
+    },
+    {
+      "payment_index": 137,
+      "payment_ref": "PAY-0137",
+      "order_ref": "ORD-0137",
+      "gateway_payment_id": "pay_Rzp0137",
+      "category": "DUPLICATE_RECORD",
+      "expected_discrepancy": "DUPLICATE_RECORD"
+    },
+    {
+      "payment_index": 138,
+      "payment_ref": "PAY-0138",
+      "order_ref": "ORD-0138",
+      "gateway_payment_id": "pay_Rzp0138",
+      "category": "DUPLICATE_RECORD",
+      "expected_discrepancy": "DUPLICATE_RECORD"
+    },
+    {
+      "payment_index": 139,
+      "payment_ref": "PAY-0139",
+      "order_ref": "ORD-0139",
+      "gateway_payment_id": "pay_Rzp0139",
+      "category": "DUPLICATE_RECORD",
+      "expected_discrepancy": "DUPLICATE_RECORD"
+    },
+    {
+      "payment_index": 140,
+      "payment_ref": "PAY-0140",
+      "order_ref": "ORD-0140",
+      "gateway_payment_id": "pay_Rzp0140",
+      "category": "FEE_MISMATCH",
+      "expected_discrepancy": "FEE_MISMATCH"
+    },
+    {
+      "payment_index": 141,
+      "payment_ref": "PAY-0141",
+      "order_ref": "ORD-0141",
+      "gateway_payment_id": "pay_Rzp0141",
+      "category": "FEE_MISMATCH",
+      "expected_discrepancy": "FEE_MISMATCH"
+    },
+    {
+      "payment_index": 142,
+      "payment_ref": "PAY-0142",
+      "order_ref": "ORD-0142",
+      "gateway_payment_id": "pay_Rzp0142",
+      "category": "FEE_MISMATCH",
+      "expected_discrepancy": "FEE_MISMATCH"
+    },
+    {
+      "payment_index": 143,
+      "payment_ref": "PAY-0143",
+      "order_ref": "ORD-0143",
+      "gateway_payment_id": "pay_Rzp0143",
+      "category": "FEE_MISMATCH",
+      "expected_discrepancy": "FEE_MISMATCH"
+    },
+    {
+      "payment_index": 144,
+      "payment_ref": "PAY-0144",
+      "order_ref": "ORD-0144",
+      "gateway_payment_id": "pay_Rzp0144",
+      "category": "FEE_MISMATCH",
+      "expected_discrepancy": "FEE_MISMATCH"
+    },
+    {
+      "payment_index": 145,
+      "payment_ref": "PAY-0145",
+      "order_ref": "ORD-0145",
+      "gateway_payment_id": "pay_Rzp0145",
+      "category": "FEE_MISMATCH",
+      "expected_discrepancy": "FEE_MISMATCH"
+    },
+    {
+      "payment_index": 146,
+      "payment_ref": "PAY-0146",
+      "order_ref": "ORD-0146",
+      "gateway_payment_id": "pay_Rzp0146",
+      "category": "PARTIAL_SETTLEMENT",
+      "expected_discrepancy": "PARTIAL_SETTLEMENT"
+    },
+    {
+      "payment_index": 147,
+      "payment_ref": "PAY-0147",
+      "order_ref": "ORD-0147",
+      "gateway_payment_id": "pay_Rzp0147",
+      "category": "PARTIAL_SETTLEMENT",
+      "expected_discrepancy": "PARTIAL_SETTLEMENT"
+    },
+    {
+      "payment_index": 148,
+      "payment_ref": "PAY-0148",
+      "order_ref": "ORD-0148",
+      "gateway_payment_id": "pay_Rzp0148",
+      "category": "PARTIAL_SETTLEMENT",
+      "expected_discrepancy": "PARTIAL_SETTLEMENT"
+    },
+    {
+      "payment_index": 149,
+      "payment_ref": "PAY-0149",
+      "order_ref": "ORD-0149",
+      "gateway_payment_id": "pay_Rzp0149",
+      "category": "PARTIAL_SETTLEMENT",
+      "expected_discrepancy": "PARTIAL_SETTLEMENT"
+    },
+    {
+      "payment_index": 150,
+      "payment_ref": "PAY-0150",
+      "order_ref": "ORD-0150",
+      "gateway_payment_id": "pay_Rzp0150",
+      "category": "PARTIAL_SETTLEMENT",
+      "expected_discrepancy": "PARTIAL_SETTLEMENT"
+    },
+    {
+      "payment_index": 151,
+      "payment_ref": "PAY-0151",
+      "order_ref": "ORD-0151",
+      "gateway_payment_id": "pay_Rzp0151",
+      "category": "PARTIAL_SETTLEMENT",
+      "expected_discrepancy": "PARTIAL_SETTLEMENT"
+    },
+    {
+      "payment_index": 152,
+      "payment_ref": "PAY-0152",
+      "order_ref": "ORD-0152",
+      "gateway_payment_id": "pay_Rzp0152",
+      "category": "DELAYED_SETTLEMENT",
+      "expected_discrepancy": "DELAYED_SETTLEMENT"
+    },
+    {
+      "payment_index": 153,
+      "payment_ref": "PAY-0153",
+      "order_ref": "ORD-0153",
+      "gateway_payment_id": "pay_Rzp0153",
+      "category": "DELAYED_SETTLEMENT",
+      "expected_discrepancy": "DELAYED_SETTLEMENT"
+    },
+    {
+      "payment_index": 154,
+      "payment_ref": "PAY-0154",
+      "order_ref": "ORD-0154",
+      "gateway_payment_id": "pay_Rzp0154",
+      "category": "DELAYED_SETTLEMENT",
+      "expected_discrepancy": "DELAYED_SETTLEMENT"
+    },
+    {
+      "payment_index": 155,
+      "payment_ref": "PAY-0155",
+      "order_ref": "ORD-0155",
+      "gateway_payment_id": "pay_Rzp0155",
+      "category": "DELAYED_SETTLEMENT",
+      "expected_discrepancy": "DELAYED_SETTLEMENT"
+    },
+    {
+      "payment_index": 156,
+      "payment_ref": "PAY-0156",
+      "order_ref": "ORD-0156",
+      "gateway_payment_id": "pay_Rzp0156",
+      "category": "DELAYED_SETTLEMENT",
+      "expected_discrepancy": "DELAYED_SETTLEMENT"
+    },
+    {
+      "payment_index": 157,
+      "payment_ref": "PAY-0157",
+      "order_ref": "ORD-0157",
+      "gateway_payment_id": "pay_Rzp0157",
+      "category": "DELAYED_SETTLEMENT",
+      "expected_discrepancy": "DELAYED_SETTLEMENT"
+    },
+    {
+      "payment_index": 158,
+      "payment_ref": "PAY-0158",
+      "order_ref": "ORD-0158",
+      "gateway_payment_id": "pay_Rzp0158",
+      "category": "REFERENCE_MISMATCH",
+      "expected_discrepancy": "REFERENCE_MISMATCH"
+    },
+    {
+      "payment_index": 159,
+      "payment_ref": "PAY-0159",
+      "order_ref": "ORD-0159",
+      "gateway_payment_id": "pay_Rzp0159",
+      "category": "REFERENCE_MISMATCH",
+      "expected_discrepancy": "REFERENCE_MISMATCH"
+    },
+    {
+      "payment_index": 160,
+      "payment_ref": "PAY-0160",
+      "order_ref": "ORD-0160",
+      "gateway_payment_id": "pay_Rzp0160",
+      "category": "REFERENCE_MISMATCH",
+      "expected_discrepancy": "REFERENCE_MISMATCH"
+    },
+    {
+      "payment_index": 161,
+      "payment_ref": "PAY-0161",
+      "order_ref": "ORD-0161",
+      "gateway_payment_id": "pay_Rzp0161",
+      "category": "REFERENCE_MISMATCH",
+      "expected_discrepancy": "REFERENCE_MISMATCH"
+    },
+    {
+      "payment_index": 162,
+      "payment_ref": "PAY-0162",
+      "order_ref": "ORD-0162",
+      "gateway_payment_id": "pay_Rzp0162",
+      "category": "REFERENCE_MISMATCH",
+      "expected_discrepancy": "REFERENCE_MISMATCH"
+    },
+    {
+      "payment_index": 163,
+      "payment_ref": "PAY-0163",
+      "order_ref": "ORD-0163",
+      "gateway_payment_id": "pay_Rzp0163",
+      "category": "AMBIGUOUS_MATCH",
+      "expected_discrepancy": "AMBIGUOUS_MATCH"
+    },
+    {
+      "payment_index": 164,
+      "payment_ref": "PAY-0164",
+      "order_ref": "ORD-0164",
+      "gateway_payment_id": "pay_Rzp0164",
+      "category": "AMBIGUOUS_MATCH",
+      "expected_discrepancy": "AMBIGUOUS_MATCH"
+    },
+    {
+      "payment_index": 165,
+      "payment_ref": "PAY-0165",
+      "order_ref": "ORD-0165",
+      "gateway_payment_id": "pay_Rzp0165",
+      "category": "AMBIGUOUS_MATCH",
+      "expected_discrepancy": "AMBIGUOUS_MATCH"
+    }
+  ]
+}

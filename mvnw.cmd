@@ -6,8 +6,9 @@
 
 @SET ERROR_CODE=0
 
-@SET MAVEN_PROJECTBASEDIR=%~dp0
-@SET WRAPPER_JAR="%MAVEN_PROJECTBASEDIR%.mvn\wrapper\maven-wrapper.jar"
+@SET "MAVEN_PROJECTBASEDIR=%~dp0"
+@IF "%MAVEN_PROJECTBASEDIR:~-1%"=="\" SET "MAVEN_PROJECTBASEDIR=%MAVEN_PROJECTBASEDIR:~0,-1%"
+@SET WRAPPER_JAR="%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.jar"
 @SET WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 
 @REM Fallback to local installed mvn if available
@@ -19,7 +20,7 @@
 
 @IF NOT EXIST %WRAPPER_JAR% (
     @ECHO Downloading Maven Wrapper jar...
-    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.3.2/maven-wrapper-3.3.2.jar', '%MAVEN_PROJECTBASEDIR%.mvn\wrapper\maven-wrapper.jar')"
+    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.3.2/maven-wrapper-3.3.2.jar', '%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.jar')"
 )
 
 @IF EXIST %WRAPPER_JAR% (
@@ -40,4 +41,3 @@
 
 :end
 @EXIT /B %ERROR_CODE%
-

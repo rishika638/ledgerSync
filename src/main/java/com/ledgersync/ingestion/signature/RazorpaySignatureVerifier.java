@@ -14,7 +14,7 @@ public class RazorpaySignatureVerifier implements ProviderSignatureVerifier {
     private final String secret;
 
     public RazorpaySignatureVerifier(
-            @Value("${ledgersync.webhook.razorpay.secret:whsec_test_razorpay_secret_key_xyz789}") String secret) {
+            @Value("${ledgersync.webhook.razorpay.secret:}") String secret) {
         this.secret = secret;
     }
 
@@ -25,8 +25,8 @@ public class RazorpaySignatureVerifier implements ProviderSignatureVerifier {
 
     @Override
     public boolean verify(byte[] rawBody, String signatureHeader) {
-        if (rawBody == null || signatureHeader == null || signatureHeader.isBlank()) {
-            log.warn("Razorpay signature verification failed: empty payload or signature header");
+        if (secret == null || secret.isBlank() || rawBody == null || signatureHeader == null || signatureHeader.isBlank()) {
+            log.warn("Razorpay signature verification failed: missing secret, payload, or signature header");
             return false;
         }
 

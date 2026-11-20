@@ -87,6 +87,7 @@ public class ReconciliationService {
                 ReconciliationRunEntity.RunStatus.STARTED,
                 Instant.now()
         );
+        run.setRunType("PROVIDER_RECONCILIATION");
         run = runRepository.saveAndFlush(run);
 
         int remoteCount = 0;

@@ -1,556 +1,194 @@
-# LedgerSync
+# LedgerSync — AI-Assisted Financial Reconciliation & Investigation
 
-**A payment webhook ingestion and reconciliation backend built with Java, Spring Boot, PostgreSQL and Redis.**
+Reconcile merchant, payment-provider, and bank records with deterministic matching, then investigate exceptions using persisted evidence and human-controlled decisions.
 
-LedgerSync demonstrates how a backend system can accept payment webhooks safely, process them asynchronously, maintain payment state, recover from processing failures and identify discrepancies through reconciliation.
+[![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Spring Boot 3.3.4](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 
-The project focuses on correctness at the database boundary, explicit failure handling and verifiable behavior rather than claiming guarantees that a distributed system cannot universally provide.
+**The core distinction:** financial matching is deterministic; AI is advisory and evidence-grounded; authorized people control resolution; actions are recorded in an application audit trail.
 
----
+## The problem
 
-## Contents
+Finance teams compare captured payments, provider settlements, and bank credits across separate exports. Missing records, duplicates, fee/tax differences, late settlements, and ambiguous references require investigation before anyone can safely resolve them.
 
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Core workflows](#core-workflows)
-- [Engineering decisions](#engineering-decisions)
-- [Data integrity](#data-integrity)
-- [Security](#security)
-- [Observability](#observability)
-- [Technology stack](#technology-stack)
-- [Local setup](#local-setup)
-- [API reference](#api-reference)
-- [Verification and evidence](#verification-and-evidence)
-- [Project structure](#project-structure)
-- [Known limitations](#known-limitations)
+## What LedgerSync does
 
----
+LedgerSync imports complete CSV snapshots from three sources, runs a deterministic three-way reconciliation, and presents detected discrepancies with linked source evidence. A finance operator can request an investigation, review its recommendation, and approve or reject a supported action. The service records successful actions and audit events transactionally.
 
-## Overview
+## Key capabilities
 
-Payment providers commonly deliver webhooks using an at-least-once delivery model. A provider may resend an event when an acknowledgement is delayed or lost.
-
-A backend must therefore handle more than receiving an HTTP request. It must also account for duplicate deliveries, invalid signatures, concurrent processing, worker failures, invalid payment transitions and differences between internal payment records and provider-side records.
-
-LedgerSync implements the following workflows:
-
-- Stripe and Razorpay webhook ingestion with provider-specific HMAC signature verification.
-- Database-backed webhook deduplication.
-- Transactional webhook and inbox persistence.
-- Asynchronous inbox processing using PostgreSQL row locking.
-- Payment lifecycle and refund state transitions.
-- Retry handling, dead-letter storage and controlled redrive.
-- Optional Redis coordination with PostgreSQL-based processing fallback.
-- Reconciliation runs, discrepancy tracking and audited resolution.
-- API-key authentication and role-based authorization.
-- Application health checks, metrics and correlation identifiers.
-
-This is an engineering project demonstrating these mechanisms. It is not a live payment processor or a production integration with payment-provider settlement APIs.
+- CSV imports for merchant **LEDGER**, **RAZORPAY**, and **BANK** sources, with row diagnostics and exact-file repeat-upload idempotency.
+- Three-way matching against the latest completed full import batch for each source.
+- Integer minor-unit monetary storage and calculations (paise for INR).
+- Exception queue, transaction explorer, reconciliation run history, Finance Assistant, and audit history.
+- Investigation using Gemini when configured, with a deterministic rule-based fallback when it is unavailable or unconfigured.
+- Server-side role checks and human approval controls; AI recommendations do not directly approve or mutate financial source records.
+- Existing payment/webhook and inbox/retry/dead-letter components.
 
 ## Architecture
 
 ```mermaid
-flowchart TD
-    P["Payment Providers<br/>Stripe / Razorpay"]
-    S["Signature Verification<br/>HMAC validation"]
-    I["Webhook Ingestion Service"]
-    DB[("PostgreSQL<br/>Source of Truth")]
-    W["Inbox Worker"]
-    R["Optional Redis Coordination"]
-    PS["Payment State Machine"]
-    A["Audit Service"]
-    RC["Reconciliation Service"]
-    M["Mock Provider Clients"]
-    D["Discrepancy Records"]
-
-    P --> S
-    S --> I
-    I -->|"Transactional persistence"| DB
-    W -->|"Claim pending work"| DB
-    R -.->|"Optional coordination"| W
-    W --> PS
-    PS -->|"Payment updates"| DB
-    PS --> A
+flowchart LR
+    L[Merchant ledger CSV] --> I[Spring Boot CSV import]
+    G[Provider settlement CSV] --> I
+    B[Bank statement CSV] --> I
+    I --> DB[(PostgreSQL)]
+    DB --> R[Deterministic three-way matcher]
+    R --> M[Run matches and exceptions]
+    M --> X[Evidence-backed investigation]
+    X --> AI{Gemini configured?}
+    AI -->|Yes| GAI[Gemini investigation]
+    AI -->|No or unavailable| F[Rule-based fallback]
+    GAI --> H[Human review]
+    F --> H
+    H -->|Authorized decision| A[Resolution and audit event]
     A --> DB
-    RC --> DB
-    RC --> M
-    M --> RC
-    RC --> D
-    D --> DB
+    DB --> UI[React + TypeScript UI]
 ```
 
-PostgreSQL is the persistent source of truth. Redis is an optional coordination component; database row locking remains the important protection for concurrent inbox processing.
+The matching engine does not read `demo-data/ground_truth.json`. That file is consumed only by the separate post-run evaluation script.
 
-### Request and processing flow
+## Three-way reconciliation workflow
 
-1. A provider sends a webhook.
-2. The application verifies its signature before accepting the event.
-3. The ingestion service persists the webhook and corresponding inbox message transactionally.
-4. A worker claims pending inbox messages using PostgreSQL locking.
-5. The payment processing service applies the relevant state transition.
-6. Payment changes and associated audit records are persisted.
-7. Failed messages are retried and eventually moved to the dead-letter state when the retry limit is reached.
+1. Import a complete snapshot for each source. Partial uploads are not combined.
+2. The matcher selects each source's latest completed batch and persists those batch IDs on the run.
+3. It links records using source references, order identifiers, currency, amount, fee/tax, and settlement data.
+4. It records confirmed matches separately from exceptions. A delayed settlement can have a match row and a delay exception, so these counts are not complements.
+5. Ambiguous candidates are flagged rather than arbitrarily or repeatedly matched.
 
-Reconciliation runs separately from normal webhook processing and records discrepancies for investigation.
+Amounts are represented as integer minor units. The documented settlement invariant is `net = gross - fee - tax + signed adjustments`; the 72-hour delayed-settlement threshold and configured fee/tax rules must be checked against a merchant's contract before operational use.
 
-For a more detailed view, see [Architecture and design](docs/architecture.md).
+## Exception detection and investigation
 
-## Core workflows
+The matcher classifies missing gateway or bank records, amount mismatches, duplicates, fee/tax discrepancies, partial or delayed settlements, reference mismatches, and ambiguous candidates. An investigation receives persisted discrepancy/source evidence and stores its result for review. If Gemini is not configured or available, the UI can report a clearly labeled rule-based fallback; live Gemini generation has **not** been verified.
 
-### 1. Webhook ingestion and idempotency
+## AI and human-approval safeguards
 
-Supported ingestion routes:
+- Reconciliation decisions are made by Java rules, not an LLM.
+- The AI investigation is advisory; it cannot approve, force a match, or directly mutate financial source records.
+- Server-side authorization protects financial actions; repeated/concurrent resolution attempts are guarded.
+- Resolution actions and corresponding audit events are written transactionally.
+- Audit history is application-recorded, not cryptographically immutable against a database administrator.
 
-- `POST /api/v1/webhooks/stripe`
-- `POST /api/v1/webhooks/razorpay`
-- `POST /api/v1/webhooks/{provider}`
+## Tech stack
 
-Stripe signatures are calculated using HMAC-SHA256 over the timestamp and raw request body. Timestamp tolerance is configurable, with a default of 300 seconds.
-
-Razorpay signature verification uses HMAC-SHA256 over the raw request body.
-
-Webhook identity is protected by a database uniqueness constraint. Repeated deliveries of the same provider event are acknowledged as duplicates instead of creating another processing record.
-
-### 2. Asynchronous inbox processing
-
-Accepted webhooks are persisted with inbox messages before asynchronous processing.
-
-Workers claim eligible records using PostgreSQL `FOR UPDATE SKIP LOCKED`, allowing multiple workers to compete for work without claiming the same locked row simultaneously.
-
-The implementation also includes:
-
-- Configurable batch size and polling interval.
-- Retry limits.
-- Failure tracking.
-- Abandoned-job recovery.
-- Dead-letter handling.
-
-### 3. Payment lifecycle and refunds
-
-Payment processing uses an explicit state machine rather than allowing arbitrary status changes.
-
-The implemented lifecycle covers creation, authorization, capture, partial refunds and full refunds.
-
-Amounts are represented in integer minor units rather than binary floating-point values. Database constraints enforce important amount relationships, including captured amounts not exceeding the original amount and refunded amounts not exceeding captured amounts.
-
-### 4. Retry, dead letters and redrive
-
-Messages that fail processing can be retried up to a configured limit.
-
-Messages that exhaust their retries enter the dead-letter state. Operators can inspect dead letters and request a controlled redrive.
-
-Redrive resets the message for another processing attempt and records an audit event. It does not silently erase the previous operational history.
-
-### 5. Redis coordination and PostgreSQL fallback
-
-Redis provides optional worker coordination.
-
-If Redis is unavailable, processing can continue using the PostgreSQL-backed worker path. PostgreSQL row locking is the database-level concurrency mechanism; Redis should not be interpreted as the sole correctness boundary.
-
-### 6. Reconciliation and audit
-
-Reconciliation compares internal payment records with records returned by provider clients.
-
-The current provider clients use deterministic mock fixtures. They demonstrate reconciliation behavior but do not make live calls to Stripe or Razorpay.
-
-The reconciliation workflow can identify:
-
-- Missing local payment records.
-- Payment status mismatches.
-- Amount mismatches.
-- Unexpected refunds.
-- Stale unresolved discrepancies.
-
-Discrepancies can be reviewed and resolved through an authorized API operation. Resolution is recorded in the audit history.
-
----
-
-## Engineering decisions
-
-| Decision | Reason |
+| Area | Technologies |
 |---|---|
-| PostgreSQL as source of truth | Durable persistence and transactional consistency |
-| Unique database constraints | Enforce webhook deduplication at the persistence boundary |
-| Transactional inbox | Persist accepted events and processing work together |
-| `FOR UPDATE SKIP LOCKED` | Allow concurrent workers to claim different records |
-| Integer minor-unit amounts | Avoid binary floating-point representation for monetary values |
-| Explicit payment state machine | Keep payment transitions controlled |
-| Retry and dead-letter states | Make processing failures visible and recoverable |
-| Optional Redis coordination | Add coordination without making Redis a hard processing dependency |
-| Audit records | Preserve important operational and administrative changes |
-| Flyway migrations | Version and apply database schema changes explicitly |
+| Backend | Java 21, Spring Boot 3.3.4, Maven |
+| Persistence | PostgreSQL 16, Spring Data JPA, Flyway |
+| Async/cache integration | Redis 7; inbox, retry, and dead-letter processing |
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
+| Optional investigation provider | Gemini API via server-side `GEMINI_API_KEY`; deterministic fallback available |
+| Local development | Docker Compose, Windows PowerShell scripts |
 
-These mechanisms reduce specific failure modes. They do not establish universal exactly-once delivery or guarantee correctness across every possible external provider failure.
+## Screenshots
 
-## Data integrity
+Screens show the local synthetic/demo application. Displayed run counts and match coverage are illustrative persisted demo data, not benchmark precision or accuracy. The investigation view shown uses the labeled **rule-based fallback**.
 
-Database schema changes are managed through Flyway.
-
-Current migrations:
-
-- `V1__init_schema.sql`
-- `V2__indexes_and_constraints.sql`
-
-The schema includes records for:
-
-- Webhook events.
-- Inbox messages.
-- Payment transactions.
-- Refunds.
-- Outbox messages.
-- Reconciliation runs.
-- Discrepancies.
-- Audit events.
-
-Important database constraints include:
-
-- Non-negative payment and captured/refunded amounts.
-- Captured amount not exceeding the original payment amount.
-- Refunded amount not exceeding the captured amount.
-- Positive refund amounts.
-
-Hibernate uses schema validation rather than automatically creating or modifying the production schema.
-
-See [Database migration verification](docs/evidence/database-migrations.md).
-
-## Security
-
-The application uses API-key authentication with role-based access control.
-
-The configured roles distinguish ingestion, operator and administrator access.
-
-Examples of protected operations include:
-
-- Reading payment information.
-- Inspecting inbox and dead-letter records.
-- Triggering reconciliation.
-- Redriving dead-letter messages.
-- Resolving reconciliation discrepancies.
-
-Webhook routes are protected by provider signature verification rather than requiring an operator API key.
-
-**Production security requirements:**
-
-- Supply unique API keys and webhook secrets through environment variables or a secret manager.
-- Do not use development fallback credentials in production.
-- Do not commit `.env` files or real credentials.
-- Restrict management endpoints and database access appropriately.
-- Use TLS at the deployment boundary.
-- Rotate credentials if they have been exposed.
-
-See [Security verification](docs/evidence/test-7-security-access-control.md).
-
-## Observability
-
-Spring Boot Actuator exposes health, readiness, liveness and metrics endpoints.
-
-Custom Micrometer counters include:
-
-| Metric | Purpose |
+| Dashboard | Reconciliation |
 |---|---|
-| `ledgersync.webhooks.received` | Received webhook requests |
-| `ledgersync.webhooks.duplicates` | Duplicate webhook deliveries |
-| `ledgersync.webhooks.invalid_signature` | Rejected signature requests |
-| `ledgersync.inbox.processed` | Successfully processed inbox messages |
-| `ledgersync.inbox.dead_letters` | Messages moved to dead-letter state |
-| `ledgersync.reconciliation.discrepancies` | Detected reconciliation discrepancies |
+| ![LedgerSync dashboard](docs/screenshots/dashboard.png)<br><sub>Current dashboard metrics and persisted activity.</sub> | ![LedgerSync reconciliation runs](docs/screenshots/reconciliation.png)<br><sub>Run history; match coverage is not precision.</sub> |
 
-The correlation filter accepts or generates a correlation identifier and returns it in the response. It also handles trace-context headers and populates MDC values.
-
-Correlation identifiers and trace-context propagation are implemented; this should not be confused with a fully instrumented distributed tracing system.
-
-Useful local endpoints:
-
-| Endpoint | Purpose |
+| Investigation | Audit trail |
 |---|---|
-| `/actuator/health` | Application and dependency health |
-| `/actuator/health/readiness` | Readiness probe |
-| `/actuator/health/liveness` | Liveness probe |
-| `/actuator/metrics` | Available metrics |
-| `/actuator/prometheus` | Prometheus metrics |
+| ![LedgerSync exception investigation](docs/screenshots/investigation.png)<br><sub>Source evidence, fallback recommendation, and human controls.</sub> | ![LedgerSync audit trail](docs/screenshots/audit-trail.png)<br><sub>Application-recorded investigation and reconciliation events.</sub> |
 
-See [Observability verification](docs/evidence/test-8-observability.md).
+## Quickstart (Windows PowerShell)
 
-## Technology stack
+Prerequisites: Docker Desktop with Compose v2, Java 21, Node.js 20+, and npm 10+.
 
-| Area | Technology |
+From the repository root, start PostgreSQL and Redis:
+
+```powershell
+.\scripts\run-local.ps1
+```
+
+The script creates `.env` from `.env.example` only when it does not exist, and starts the database and Redis containers without removing named volumes. In two other PowerShell terminals, start the backend and frontend:
+
+```powershell
+.\scripts\start-backend.ps1
+```
+
+```powershell
+.\scripts\start-frontend.ps1
+```
+
+Open `http://localhost:5173`. Local example sign-in credentials are `operator` / `operator` and `admin` / `admin`; replace them outside local development. The backend is at `http://localhost:8080`, health check at `/actuator/health`, and Swagger UI at `/swagger-ui.html`.
+
+### Demo workflow
+
+Sign in as `operator`, choose **Load Demo Dataset**, then **Run Reconciliation**. Open an exception and request an investigation. Without a configured Gemini key, expect a deterministic fallback. Review and approve or reject a permitted action, then inspect its audit event. Demo reset and force reload are administrator-only; do not use them against shared or persistent data.
+
+## Environment configuration
+
+The local startup scripts read `.env`; keep it private and do not commit it. The template is [.env.example](.env.example). Important variables:
+
+| Variables | Purpose |
 |---|---|
-| Language | Java 21 |
-| Backend framework | Spring Boot 3.3.4 |
-| Database | PostgreSQL 16 |
-| Persistence | Spring Data JPA / Hibernate |
-| Schema migrations | Flyway |
-| Worker coordination | Redis |
-| Metrics | Micrometer / Prometheus |
-| API documentation | Springdoc OpenAPI |
-| Testing | JUnit / Spring Boot Test |
-| Infrastructure | Docker Compose |
-| Build | Maven |
+| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST_PORT` | Compose PostgreSQL credentials and published port (default `5433`). |
+| `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD` | Backend PostgreSQL connection. |
+| `REDIS_HOST_PORT`, `SPRING_DATA_REDIS_HOST`, `SPRING_DATA_REDIS_PORT`, `SPRING_DATA_REDIS_PASSWORD` | Redis port mapping and backend connection (default host port `6380`). |
+| `LEDGERSYNC_OPERATOR_USERNAME`, `LEDGERSYNC_OPERATOR_PASSWORD`, `LEDGERSYNC_ADMIN_USERNAME`, `LEDGERSYNC_ADMIN_PASSWORD` | Local browser accounts; change for non-local environments. |
+| `LEDGERSYNC_SECURITY_API_KEYS_INGESTION`, `LEDGERSYNC_SECURITY_API_KEYS_OPERATOR`, `LEDGERSYNC_SECURITY_API_KEYS_ADMIN` | Optional API-key clients; blank by default. |
+| `LEDGERSYNC_WEBHOOK_STRIPE_SECRET`, `LEDGERSYNC_WEBHOOK_RAZORPAY_SECRET` | Optional webhook signing secrets; verification fails closed if unset. |
+| `GEMINI_API_KEY`, `GEMINI_MODEL` | Optional server-side Gemini access. A blank key uses the fallback. Never expose the key through a `VITE_` variable. |
+| `VITE_BACKEND_URL`, `VITE_API_BASE_URL` | Vite proxy target and optional direct API base; local defaults are documented in `.env.example`. |
 
----
+## Sample CSV formats
 
-## Local setup
+The included synthetic snapshots are in [`demo-data/`](demo-data/). Required headers:
 
-### Prerequisites
+| Source | CSV header |
+|---|---|
+| LEDGER | `ledger_id,order_id,customer_id,currency,amount,fee,tax,created_at,description,status` |
+| RAZORPAY | `payment_id,settlement_id,order_id,arn_utr,currency,gross_amount,fee,tax,net_amount,settled_at,payment_method,status` |
+| BANK | `bank_txn_id,account_number,value_date,credit_amount,debit_amount,currency,reference_utr,description,balance` |
 
-- JDK 21
-- Docker Desktop with Docker Compose
-- PowerShell on Windows, or a compatible shell on Linux/macOS
+Templates are available from `GET /api/v1/finance/imports/templates/{ledger|razorpay|bank}`. CSV amounts must be valid decimal currency values with no fractions smaller than one minor unit. Imports support UTF-8 CSV, including quoted multiline fields.
 
-### 1. Start PostgreSQL and Redis
+## Tests and benchmark
 
-From the repository root:
-
-```powershell
-docker compose up -d
-```
-
-This starts:
-
-- PostgreSQL on port `5432`.
-- Redis on port `6379`.
-
-The Compose file creates persistent named volumes for both services. Do not remove those volumes if you need to preserve local database or Redis data.
-
-Check service status:
-
-```powershell
-docker compose ps
-```
-
-### 2. Configure environment variables
-
-Create a local environment file:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Before running the application, replace all example credentials and secrets with local-only values. Keep `.env` out of version control.
-
-PowerShell does not automatically import variables from a `.env` file into the current process. Load them into the current terminal session:
-
-```powershell
-Get-Content .env |
-    Where-Object { $_ -match '^\s*[A-Za-z_][A-Za-z0-9_]*=' } |
-    ForEach-Object {
-        $name, $value = $_ -split '=', 2
-        [Environment]::SetEnvironmentVariable($name, $value, 'Process')
-    }
-```
-
-The application reads configuration from environment variables. The variable names used by the project include:
-
-```text
-SERVER_PORT
-
-SPRING_DATASOURCE_URL
-SPRING_DATASOURCE_USERNAME
-SPRING_DATASOURCE_PASSWORD
-SPRING_FLYWAY_ENABLED
-
-SPRING_DATA_REDIS_HOST
-SPRING_DATA_REDIS_PORT
-SPRING_DATA_REDIS_PASSWORD
-
-LEDGERSYNC_SECURITY_API_KEYS_INGESTION
-LEDGERSYNC_SECURITY_API_KEYS_OPERATOR
-LEDGERSYNC_SECURITY_API_KEYS_ADMIN
-
-LEDGERSYNC_WEBHOOK_STRIPE_SECRET
-LEDGERSYNC_WEBHOOK_RAZORPAY_SECRET
-
-LEDGERSYNC_INBOX_WORKER_ENABLED
-LEDGERSYNC_INBOX_POLL_INTERVAL_MS
-LEDGERSYNC_INBOX_BATCH_SIZE
-LEDGERSYNC_INBOX_MAX_RETRIES
-LEDGERSYNC_INBOX_ABANDONED_TIMEOUT_SECONDS
-
-LEDGERSYNC_RECONCILIATION_CRON
-```
-
-### 3. Run automated tests
-
-The project uses the Maven Wrapper. On this Windows environment, the following direct wrapper invocation was verified:
-
-```powershell
-java "-Dmaven.multiModuleProjectDirectory=$((Get-Location).Path)" -cp ".mvn\wrapper\maven-wrapper.jar" org.apache.maven.wrapper.MavenWrapperMain clean verify -B
-```
-
-The equivalent standard Maven command, when Maven is installed, is:
-
-```powershell
-mvn clean verify
-```
-
-### 4. Start the application
-
-```powershell
-java "-Dmaven.multiModuleProjectDirectory=$((Get-Location).Path)" -cp ".mvn\wrapper\maven-wrapper.jar" org.apache.maven.wrapper.MavenWrapperMain spring-boot:run
-```
-
-The application listens on:
-
-```text
-http://localhost:8080
-```
-
-Flyway applies configured migrations during application startup.
-
-### 5. Explore the API
-
-- Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- OpenAPI document: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
-- Health: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
-- Prometheus: [http://localhost:8080/actuator/prometheus](http://localhost:8080/actuator/prometheus)
-
----
-
-## API reference
-
-The following routes represent the main application workflows. Swagger UI provides the detailed request and response schemas.
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/v1/webhooks/stripe` | Receive Stripe webhook |
-| POST | `/api/v1/webhooks/razorpay` | Receive Razorpay webhook |
-| POST | `/api/v1/webhooks/{provider}` | Provider-based webhook route |
-| GET | `/api/v1/payments` | Read payment records |
-| GET | `/api/v1/queue/inbox` | Inspect inbox messages |
-| GET | `/api/v1/queue/inbox/{id}` | Inspect an inbox message |
-| GET | `/api/v1/queue/dead-letters` | List dead-letter messages |
-| POST | `/api/v1/queue/redrive/{id}` | Redrive a dead-letter message |
-| POST | `/api/v1/queue/redrive/all` | Request bulk redrive |
-| POST | `/api/v1/reconciliation/run?provider=STRIPE` | Start reconciliation |
-| GET | `/api/v1/reconciliation/runs` | List reconciliation runs |
-| GET | `/api/v1/reconciliation/discrepancies` | List discrepancies |
-| POST | `/api/v1/reconciliation/discrepancies/{id}/resolve` | Resolve a discrepancy |
-
-Operator and administrator operations require the appropriate API-key role. Webhook requests must pass provider signature verification.
-
----
-
-## Verification and evidence
-
-The project includes automated tests and separate evidence records for the main runtime scenarios.
-
-### Automated verification
-
-The latest recorded local verification:
+Verified in the engineering report:
 
 | Check | Result |
 |---|---|
-| Java version | 21.0.13 |
-| Maven version | 3.9.8 |
-| Main source compilation | Successful |
-| Test source compilation | Successful |
-| Automated tests | 28 passed |
-| Failures / errors / skipped | 0 / 0 / 0 |
-| Maven clean verify | BUILD SUCCESS |
+| `.\mvnw.cmd test` | **53 passed; 0 failures, errors, or skips.** |
+| `Set-Location frontend; npm run build` | **Passed**; TypeScript and Vite production build completed. Vite emitted a large-chunk advisory (~694 kB minified JS). |
 
-The automated test run used the test profile with an in-memory H2 database.
+Reproduce the code checks:
 
-This is local verification. A successful local build does not establish that a remote GitHub Actions run has passed.
-
-### Runtime evidence
-
-| Test | Scenario | Evidence |
-|---|---|---|
-| 1 | Webhook signatures, ingestion and duplicate delivery | [Test 1](docs/evidence/test-1-webhook-ingestion.md) |
-| 2 | Concurrent duplicate webhook delivery | [Test 2](docs/evidence/test-2-concurrent-idempotency.md) |
-| 3 | Payment lifecycle and refunds | [Test 3](docs/evidence/test-3-payment-lifecycle-refunds.md) |
-| 4 | Retry exhaustion, dead-letter handling and redrive | [Test 4](docs/evidence/test-4-retry-dlq-redrive-audit.md) |
-| 5 | Redis outage and PostgreSQL fallback | [Test 5](docs/evidence/test-5-redis-fallback.md) |
-| 6 | Reconciliation and audit resolution | [Test 6](docs/evidence/test-6-reconciliation-audit.md) |
-| 7 | API authentication and authorization | [Test 7](docs/evidence/test-7-security-access-control.md) |
-| 8 | Health, metrics and correlation identifiers | [Test 8](docs/evidence/test-8-observability.md) |
-
-Additional verification documents:
-
-- [Automated test results](docs/evidence/automated-tests.md)
-- [Database migration verification](docs/evidence/database-migrations.md)
-- [Raw redacted test output](docs/evidence/raw/automated-tests-run.redacted.txt)
-- [Raw redacted test stdout](docs/evidence/raw/automated-tests-stdout.redacted.txt)
-- [Raw redacted test stderr](docs/evidence/raw/automated-tests-stderr.redacted.txt)
-- [Raw redacted migration output](docs/evidence/raw/database-migrations-run.redacted.txt)
-
-### Engineering documentation
-
-- [Architecture and design](docs/architecture.md)
-- [Claim verification matrix](docs/claim-verification-matrix.md)
-- [Engineering report](docs/engineering-report.md)
-
-The evidence documents describe the tested scenarios, observed results and limitations. Results should be interpreted within the scope of the recorded test setup.
-
----
-
-## Project structure
-
-```text
-LedgerSync/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── docs/
-│   ├── architecture.md
-│   ├── claim-verification-matrix.md
-│   ├── engineering-report.md
-│   └── evidence/
-│       ├── raw/
-│       ├── automated-tests.md
-│       ├── database-migrations.md
-│       ├── test-1-webhook-ingestion.md
-│       ├── test-2-concurrent-idempotency.md
-│       ├── test-3-payment-lifecycle-refunds.md
-│       ├── test-4-retry-dlq-redrive-audit.md
-│       ├── test-5-redis-fallback.md
-│       ├── test-6-reconciliation-audit.md
-│       ├── test-7-security-access-control.md
-│       └── test-8-observability.md
-├── scripts/
-│   ├── run-local.ps1
-│   ├── simulate-traffic.ps1
-│   └── test-webhook.ps1
-├── src/
-│   ├── main/
-│   │   ├── java/com/ledgersync/
-│   │   │   ├── audit/
-│   │   │   ├── common/
-│   │   │   ├── ingestion/
-│   │   │   ├── observability/
-│   │   │   ├── payment/
-│   │   │   ├── queue/
-│   │   │   └── reconciliation/
-│   │   └── resources/
-│   │       ├── application.yml
-│   │       └── db/migration/
-│   └── test/
-│       ├── java/com/ledgersync/
-│       └── resources/
-├── .env.example
-├── docker-compose.yml
-├── pom.xml
-└── README.md
+```powershell
+.\mvnw.cmd test
+Set-Location frontend
+npm run build
+Set-Location ..
 ```
 
----
+The benchmark script is `.\scripts\evaluate-ground-truth.ps1`. **Current-code precision, recall, and F1 have not been evaluated:** the existing local run lacks the V6 three-source batch snapshot required by the evaluator. A historical report recorded 165/165 expected classifications on synthetic in-sample data before batch-snapshot scoping; it is not a current-code or held-out result. Do not interpret the UI's 70.3% match coverage as precision or accuracy. See [evaluation methodology and limitations](docs/evaluation-metrics.md) and [engineering verification evidence](docs/FINAL_ENGINEERING_VERIFICATION.md).
 
-## Known limitations and scope
+## Security, limitations, and future work
 
-A few boundaries are important when interpreting this implementation:
+- Live Gemini generation, PostgreSQL-backed verification of the current V6 flow, and a fresh current-code benchmark remain unverified.
+- Source imports are complete snapshots; incremental batches are not merged. Byte-identical uploads are idempotent, but concurrent duplicate-upload behavior against PostgreSQL is not verified.
+- No independent held-out dataset or production accuracy claim is available.
+- The local app has not been deployed to AWS or Vercel. Cloud files require environment-specific infrastructure and secret configuration; they are not turnkey deployment instructions.
+- Next verification work: test V6 and imports on a dedicated disposable database, run the evaluator on a fresh snapshot, and complete authorized real-provider and narrow-viewport checks.
 
-1. **Provider reconciliation is simulated.** Stripe and Razorpay reconciliation clients currently use mock fixtures. Live provider settlement API integration has not been demonstrated.
-2. **Concurrency evidence is scenario-specific.** The recorded concurrent webhook test covers ten simultaneous requests. It is not a throughput or large-scale load benchmark.
-3. **Redrive evidence has a defined scope.** The tested poison message demonstrates retry exhaustion, dead-letter handling and redrive. It does not prove successful recovery from every real provider failure.
-4. **Redis is optional coordination.** PostgreSQL row locking is the database-level protection. Redis lease behavior should not be treated as a universal distributed lock.
-5. **Observability has boundaries.** Health, metrics and correlation headers were verified. MDC population was inspected, but actual formatted console log output containing those values was not demonstrated.
-6. **Local tests and runtime tests are different.** The automated suite uses H2; the separate runtime scenarios use the local PostgreSQL and Redis environment.
-7. **Remote CI status is separate.** Local Maven verification passed, but a remote GitHub Actions result should only be claimed after the workflow has actually run.
+## API entry points
 
-LedgerSync is intended to make its engineering decisions and failure boundaries inspectable. Its documentation distinguishes implemented behavior, tested behavior and work that remains outside the current scope.
+The browser uses session login at `/api/v1/auth/login`. Key endpoints include:
 
----
+| Purpose | Endpoint |
+|---|---|
+| Upload CSV | `POST /api/v1/finance/imports/upload` |
+| Load demo | `POST /api/v1/finance/imports/demo/load` |
+| Reconcile | `POST /api/v1/finance/reconciliation/run` |
+| List exceptions / investigate / resolve | `/api/v1/finance/exceptions` |
+| Finance Assistant | `POST /api/v1/finance/assistant/query` |
+| Audit history | `GET /api/v1/finance/audit` |
 
-## License
-
-Add a license file before describing this repository as open source under a specific license.
+Interactive API reference: `http://localhost:8080/swagger-ui.html` after local startup.

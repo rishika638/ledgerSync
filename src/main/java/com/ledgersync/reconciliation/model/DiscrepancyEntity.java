@@ -1,6 +1,7 @@
 package com.ledgersync.reconciliation.model;
 
 import com.ledgersync.ingestion.model.PaymentProvider;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.Instant;
 
@@ -56,6 +57,28 @@ public class DiscrepancyEntity {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    // 3-Way Financial Additions
+    @Column(name = "amount_minor")
+    private long amountMinor;
+
+    @Column(name = "expected_amount_minor")
+    private long expectedAmountMinor;
+
+    @Column(name = "actual_amount_minor")
+    private long actualAmountMinor;
+
+    @Column(name = "currency", length = 3)
+    private String currency = "INR";
+
+    @Column(name = "ledger_record_id", length = 64)
+    private String ledgerRecordId;
+
+    @Column(name = "gateway_record_id", length = 64)
+    private String gatewayRecordId;
+
+    @Column(name = "bank_record_id", length = 64)
+    private String bankRecordId;
+
     public DiscrepancyEntity() {
     }
 
@@ -85,6 +108,7 @@ public class DiscrepancyEntity {
         this.id = id;
     }
 
+    @JsonIgnore
     public ReconciliationRunEntity getRun() {
         return run;
     }
@@ -187,5 +211,61 @@ public class DiscrepancyEntity {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public long getAmountMinor() {
+        return amountMinor;
+    }
+
+    public void setAmountMinor(long amountMinor) {
+        this.amountMinor = amountMinor;
+    }
+
+    public long getExpectedAmountMinor() {
+        return expectedAmountMinor;
+    }
+
+    public void setExpectedAmountMinor(long expectedAmountMinor) {
+        this.expectedAmountMinor = expectedAmountMinor;
+    }
+
+    public long getActualAmountMinor() {
+        return actualAmountMinor;
+    }
+
+    public void setActualAmountMinor(long actualAmountMinor) {
+        this.actualAmountMinor = actualAmountMinor;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getLedgerRecordId() {
+        return ledgerRecordId;
+    }
+
+    public void setLedgerRecordId(String ledgerRecordId) {
+        this.ledgerRecordId = ledgerRecordId;
+    }
+
+    public String getGatewayRecordId() {
+        return gatewayRecordId;
+    }
+
+    public void setGatewayRecordId(String gatewayRecordId) {
+        this.gatewayRecordId = gatewayRecordId;
+    }
+
+    public String getBankRecordId() {
+        return bankRecordId;
+    }
+
+    public void setBankRecordId(String bankRecordId) {
+        this.bankRecordId = bankRecordId;
     }
 }

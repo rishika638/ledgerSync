@@ -1,22 +1,24 @@
-# scripts/run-local.ps1
-# Starts local infrastructure (Postgres 16, Redis 7) and provides execution instructions
+$ErrorActionPreference = "Stop"
+$root = Split-Path -Parent $PSScriptRoot
+Set-Location $root
 
-Write-Host "=== LedgerSync Local Setup Helper ===" -ForegroundColor Cyan
-
-if (Get-Command docker -ErrorAction SilentlyContinue) {
-    Write-Host "Starting PostgreSQL and Redis containers via Docker Compose..." -ForegroundColor Yellow
-    docker compose up -d
-    Write-Host "Containers started. PostgreSQL listening on 5432, Redis on 6379." -ForegroundColor Green
-} else {
-    Write-Host "Docker not found in PATH. Ensure PostgreSQL (port 5432) and Redis (port 6379) are running locally." -ForegroundColor Red
+if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+    throw "Docker Desktop is required. Start Docker Desktop and rerun this script."
 }
 
-Write-Host "`nTo compile and run LedgerSync:" -ForegroundColor Cyan
-Write-Host "  mvn clean spring-boot:run" -ForegroundColor White
-Write-Host "`nTo execute automated test suites:" -ForegroundColor Cyan
-Write-Host "  mvn clean test" -ForegroundColor White
-Write-Host "`nSwagger UI / OpenAPI Documentation:" -ForegroundColor Cyan
-Write-Host "  http://localhost:8080/swagger-ui/index.html" -ForegroundColor White
-Write-Host "`nActuator Metrics & Health:" -ForegroundColor Cyan
-Write-Host "  http://localhost:8080/actuator/health" -ForegroundColor White
-Write-Host "  http://localhost:8080/actuator/metrics" -ForegroundColor White
+if (-not (Test-Path ".env")) {
+    Copy-Item ".env.example" ".env"
+    Write-Host "Created .env from .env.example. Review its local-only passwords before use." -ForegroundColor Yellow
+}
+
+Write-Host "Starting PostgreSQL 16 and Redis 7 (existing named volumes are preserved)..." -ForegroundColor Cyan
+docker compose up -d --wait postgres redis
+if ($LASTEXITCODE -ne 0) {
+    throw "Docker Compose failed to start PostgreSQL and Redis."
+}
+
+docker compose ps
+Write-Host ""
+Write-Host "Infrastructure is ready. In separate PowerShell terminals run:" -ForegroundColor Green
+Write-Host "  .\scripts\start-backend.ps1"
+Write-Host "  .\scripts\start-frontend.ps1"

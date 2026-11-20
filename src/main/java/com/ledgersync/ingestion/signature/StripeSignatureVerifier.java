@@ -20,7 +20,7 @@ public class StripeSignatureVerifier implements ProviderSignatureVerifier {
     private final long toleranceSeconds;
 
     public StripeSignatureVerifier(
-            @Value("${ledgersync.webhook.stripe.secret:whsec_test_stripe_secret_key_abc123}") String secret,
+            @Value("${ledgersync.webhook.stripe.secret:}") String secret,
             @Value("${ledgersync.webhook.stripe.tolerance-seconds:300}") long toleranceSeconds) {
         this.secret = secret;
         this.toleranceSeconds = toleranceSeconds;
@@ -33,8 +33,8 @@ public class StripeSignatureVerifier implements ProviderSignatureVerifier {
 
     @Override
     public boolean verify(byte[] rawBody, String signatureHeader) {
-        if (rawBody == null || signatureHeader == null || signatureHeader.isBlank()) {
-            log.warn("Stripe signature verification failed: empty payload or signature header");
+        if (secret == null || secret.isBlank() || rawBody == null || signatureHeader == null || signatureHeader.isBlank()) {
+            log.warn("Stripe signature verification failed: missing secret, payload, or signature header");
             return false;
         }
 

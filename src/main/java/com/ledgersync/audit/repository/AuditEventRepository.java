@@ -14,4 +14,10 @@ public interface AuditEventRepository extends JpaRepository<AuditEventEntity, St
     Page<AuditEventEntity> findByResourceTypeAndResourceId(String resourceType, String resourceId, Pageable pageable);
 
     List<AuditEventEntity> findByCorrelationId(String correlationId);
+
+    Page<AuditEventEntity> findByResourceTypeOrderByCreatedAtDesc(String resourceType, Pageable pageable);
+
+    List<AuditEventEntity> findByResourceTypeAndResourceIdOrderByCreatedAtDesc(String resourceType, String resourceId);
+
+    Page<AuditEventEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }
