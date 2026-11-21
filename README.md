@@ -11,6 +11,20 @@ Reconcile merchant, payment-provider, and bank records with deterministic matchi
 
 **The core distinction:** financial matching is deterministic; AI is advisory and evidence-grounded; authorized people control resolution; actions are recorded in an application audit trail.
 
+## 🎬 Product Demo
+
+Watch the complete LedgerSync walkthrough:
+
+[▶ Watch the LedgerSync 5-Minute Product Demo](https://drive.google.com/file/d/1jgyQXlWnSoCm3e7VUT6bZNQxeFWZsor3/view?usp=sharing)
+
+The demo covers:
+- Financial Controller Dashboard
+- CSV ingestion from three financial sources
+- Deterministic three-way reconciliation
+- Transaction Explorer and Exceptions Queue
+- Evidence-backed investigation and human approval
+- Audit Trail, Finance Assistant, and Settings
+
 ## The problem
 
 Finance teams compare captured payments, provider settlements, and bank credits across separate exports. Missing records, duplicates, fee/tax differences, late settlements, and ambiguous references require investigation before anyone can safely resolve them.
